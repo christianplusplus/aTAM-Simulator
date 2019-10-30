@@ -2,6 +2,7 @@
 
 const sqrt2 = Math.sqrt(2);
 const cr = .45; //cubic radius
+const fr = .5; //fast cubic radius
 const gd = .05; //glue depth
 const gr = .3; //glue square radius
 const lineColor = vec3(0, 0, 0);
@@ -67,11 +68,11 @@ function Tile(tileName, tileColor, position, glueIDs, glueStrengths, isSeed)
         }
         
         var angleNumber = 0;
-        if(camPosition[0] - this.position[0] < 0)
+        if(currentCam.position[0] - this.position[0] < 0)
             angleNumber += 1;
-        if(camPosition[1] - this.position[1] < 0)
+        if(currentCam.position[1] - this.position[1] < 0)
             angleNumber += 2;
-        if(camPosition[2] - this.position[2] < 0)
+        if(currentCam.position[2] - this.position[2] < 0)
             angleNumber += 4;
         var viewingAngleOffset = 53 * angleNumber;
         
@@ -114,10 +115,37 @@ function Tile(tileName, tileColor, position, glueIDs, glueStrengths, isSeed)
         gl.drawArrays(gl.LINE_STRIP, viewingAngleOffset + 50, 3);
     };
     
+    this.fastDraw = function()
+    {
+        gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(this.modelViewMatrix));
+        
+        if(flag != bufferFlags.TILE)
+        {
+            flag = bufferFlags.TILE;
+            gl.bindBuffer(gl.ARRAY_BUFFER, tileVertexBuffer);
+            gl.vertexAttribPointer(tileVertexAttribute, 3, gl.FLOAT, false, 0, 0);
+        }
+        
+        var angleNumber = 0;
+        if(currentCam.position[0] - this.position[0] < 0)
+            angleNumber += 1;
+        if(currentCam.position[1] - this.position[1] < 0)
+            angleNumber += 2;
+        if(currentCam.position[2] - this.position[2] < 0)
+            angleNumber += 4;
+        var viewingAngleOffset = 11 * angleNumber;
+        
+        gl.uniform3fv(tileColorLoc, this.tileColor);
+        gl.drawArrays(gl.TRIANGLE_FAN, viewingAngleOffset + 424, 8);
+        gl.uniform3fv(tileColorLoc, lineColor);
+        gl.drawArrays(gl.LINE_STRIP, viewingAngleOffset + 424, 8);
+        gl.drawArrays(gl.LINE_STRIP, viewingAngleOffset + 432, 3);
+    };
+    
     this.buildModel = function()
     {
         var vertices = [];
-        var index;
+        var index, index2;
         
         //angle 0
         //faces
@@ -219,6 +247,53 @@ function Tile(tileName, tileColor, position, glueIDs, glueStrengths, isSeed)
         for(var i = 0; i < index; i++)
             vertices.push(mult(rotateZ(180), mult(rotateY(90), vec4(vertices[i]))).slice(0, 3));
         
+        index = vertices.length;
+        
+        //angle 0 of fast renderer
+        vertices.push([fr,fr,fr]);
+        vertices.push([fr,fr,-fr]);
+        vertices.push([-fr,fr,-fr]);
+        vertices.push([-fr,fr,fr]);
+        vertices.push([-fr,-fr,fr]);
+        vertices.push([fr,-fr,fr]);
+        vertices.push([fr,-fr,-fr]);
+        vertices.push([fr,fr,-fr]);
+        
+        //extra lines
+        vertices.push([fr,-fr,fr]);
+        vertices.push([fr,fr,fr]);
+        vertices.push([-fr,fr,fr]);
+        
+        index2 = vertices.length;
+        
+        //angle 1
+        for(var i = index; i < index2; i++)
+            vertices.push(mult(rotateY(-90), vec4(vertices[i])).slice(0, 3));
+        
+        //angle 2
+        for(var i = index; i < index2; i++)
+            vertices.push(mult(rotateX(90), vec4(vertices[i])).slice(0, 3));
+        
+        //angle 3
+        for(var i = index; i < index2; i++)
+            vertices.push(mult(rotateZ(180), vec4(vertices[i])).slice(0, 3));
+        
+        //angle 4
+        for(var i = index; i < index2; i++)
+            vertices.push(mult(rotateY(90), vec4(vertices[i])).slice(0, 3));
+        
+        //angle 5
+        for(var i = index; i < index2; i++)
+            vertices.push(mult(rotateY(180), vec4(vertices[i])).slice(0, 3));
+        
+        //angle 6
+        for(var i = index; i < index2; i++)
+            vertices.push(mult(rotateX(180), vec4(vertices[i])).slice(0, 3));
+        
+        //angle 7
+        for(var i = index; i < index2; i++)
+            vertices.push(mult(rotateZ(180), mult(rotateY(90), vec4(vertices[i]))).slice(0, 3));
+        
         return vertices;
     };
     
@@ -246,15 +321,4 @@ function Tile(tileName, tileColor, position, glueIDs, glueStrengths, isSeed)
         tile.init();
         return tile;
     };
-};
-
-String.prototype.hashCode = function(){
-  var hash = 0, i, chr;
-  if (this.length === 0) return hash;
-  for (i = 0; i < this.length; i++) {
-    chr   = this.charCodeAt(i);
-    hash  = ((hash << 5) - hash) + chr;
-    hash |= 0; // Convert to 32bit integer
-  }
-  return hash;
 };

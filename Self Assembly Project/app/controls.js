@@ -58,9 +58,9 @@ window.onkeyup = function(e)
 window.onwheel = function(e)
 {
     if(e.deltaY > 0)
-        camRange *= zoomSpeed;
+        cams[0].range *= zoomSpeed;
     else
-        camRange = Math.max(maxZoom, camRange / zoomSpeed);
+        cams[0].range = Math.max(maxZoom, cams[0].range / zoomSpeed);
     cams[0].updateCam();
 };
 
@@ -70,7 +70,9 @@ function resizeWindow()
 {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    cams.forEach(function(cam){cam.updateProjection();});
+    cams.forEach(function(cam){
+        cam.updateProjection();
+    });
 };
 
 function changeCam(cameraNumber)

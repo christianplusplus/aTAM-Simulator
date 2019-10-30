@@ -101,6 +101,12 @@ function aTAMSim(tileSet, temperature, maxSize)
             tile.draw();
     };
     
+    this.fastDraw = function()
+    {
+        for(var tile of this.assembly.values())
+            tile.fastDraw();
+    };
+    
     this.getNeighbors = function(keyString)
     {
         var keyStringSplit = keyString.split(',');

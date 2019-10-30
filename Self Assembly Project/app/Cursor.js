@@ -25,9 +25,9 @@ function Cursor()
     
     this.draw = function()
     {
-        this.modelViewMatrix[0][3] = camTarget[0];
-        this.modelViewMatrix[1][3] = camTarget[1];
-        this.modelViewMatrix[2][3] = camTarget[2];
+        this.modelViewMatrix[0][3] = currentCam.target[0];
+        this.modelViewMatrix[1][3] = currentCam.target[1];
+        this.modelViewMatrix[2][3] = currentCam.target[2];
         gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(this.modelViewMatrix));
         
         if(flag != bufferFlags.CURSOR)
