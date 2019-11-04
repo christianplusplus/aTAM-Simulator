@@ -83,8 +83,8 @@ window.onwheel = function(e)
 
 function resizeWindow()
 {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    canvas.width = Math.max(window.innerWidth, 480);
+    canvas.height = Math.max(window.innerHeight - 160, 240);
     cams.forEach(function(cam){
         cam.updateProjection();
     });

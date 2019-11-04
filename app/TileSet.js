@@ -88,10 +88,18 @@ function TileSet()
         var camAdjustmentRange = cam.range / camDiligence;
         var target = cam.target;
         var pointerPosition = this.list[this.pointer].position;
+        
         if(pointerPosition[1] - target[1] > camAdjustmentRange)
+        {
             cam.setTarget([target[0], pointerPosition[1] - camAdjustmentRange, target[2]]);
+            target = cam.target;
+        }
         else if(target[1] - pointerPosition[1] > camAdjustmentRange)
+        {
             cam.setTarget([target[0], pointerPosition[1] + camAdjustmentRange, target[2]]);
+            target = cam.target;
+        }
+        
         if(pointerPosition[0] - target[0] > camAdjustmentRange)
             cam.setTarget([pointerPosition[0] - camAdjustmentRange, target[1], target[2]]);
         else if(target[0] - pointerPosition[0] > camAdjustmentRange)

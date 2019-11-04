@@ -18,7 +18,8 @@ var sim;
 var cursor;
 var needsRefresh = true; //set in aTAMSim.simulate(), Camera.updateCam(), Camera.updateProjection(), TileSet.select(next|prev)?Row()
 var frameCounter = 0;
-var simSpeed = 1.;
+var simSpeed = 20.;
+var detailed = true;
 
 const beige = [255./255, 204./255, 153./255];
 const white = [1., 1., 1.];
@@ -99,7 +100,7 @@ window.onload = function()
     ts.add(new Tile("Filler", green, [0,0,0], [N,"yz","yz",0,"yz","yz"], [1,1,1,0,1,1], false));
     ts.add(new Tile("Filler", blue, [0,0,0], [N,N,N,N,N,N], [1,1,1,1,1,1], false));
     
-    sim = new aTAMSim(ts, 2, maxSim);
+    sim = new aTAMSim(ts, 1, maxSim);
     //while(sim.simulate());
     
     cursor = new Cursor();
