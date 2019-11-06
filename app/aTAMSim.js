@@ -96,6 +96,14 @@ function aTAMSim(tileSet, temperature, maxSize)
         return true;
     };
     
+    this.restart = function()
+    {
+        this.assembly = new Map();
+        this.frontier = [];
+        this.size = 0;
+        this.seeded = false;
+    }
+    
     this.draw = function()
     {
         for(var tile of this.assembly.values())

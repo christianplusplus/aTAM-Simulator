@@ -18,8 +18,9 @@ var sim;
 var cursor;
 var needsRefresh = true; //set in aTAMSim.simulate(), Camera.updateCam(), Camera.updateProjection(), TileSet.select(next|prev)?Row()
 var frameCounter = 0;
-var simSpeed = 20.;
-var detailed = true;
+var simSpeed = 0;
+var detailed = false;
+var showCursor = true;
 
 const beige = [255./255, 204./255, 153./255];
 const white = [1., 1., 1.];
@@ -87,7 +88,7 @@ window.onload = function()
     
     //Demo
     var ts = new TileSet();
-    var N = 10; //16 for fast draw
+    var N = 21; //16 for fast draw
     ts.add(new Tile("Seed", brown, [0,0,0], [0,0,0,0,0,0], [2,2,2,0,0,0], true));
     for(var i = 0; i < N - 1; i++)
     {
@@ -100,7 +101,7 @@ window.onload = function()
     ts.add(new Tile("Filler", green, [0,0,0], [N,"yz","yz",0,"yz","yz"], [1,1,1,0,1,1], false));
     ts.add(new Tile("Filler", blue, [0,0,0], [N,N,N,N,N,N], [1,1,1,1,1,1], false));
     
-    sim = new aTAMSim(ts, 1, maxSim);
+    sim = new aTAMSim(ts, 2, maxSim);
     //while(sim.simulate());
     
     cursor = new Cursor();
@@ -136,16 +137,18 @@ function refresh()
     changeCam(0);
     gl.uniform1i(lightOnLoc, false);
     
-    //sim.draw();
-    sim.fastDraw();
-    cursor.draw();
+    if(detailed)
+        sim.draw();
+    else
+        sim.fastDraw();
+    if(showCursor)
+        cursor.draw();
     
     gl.viewport(canvas.width/2, 0, canvas.width/2, canvas.height);
     changeCam(1);
     gl.uniform1i(lightOnLoc, true);
     gl.uniform3fv(lightSrcLoc, sim.tileSet.list[sim.tileSet.pointer].position);
     
-    //sim.fastDraw();
     sim.tileSet.draw();
 };
 

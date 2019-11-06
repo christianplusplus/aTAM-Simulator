@@ -21,14 +21,11 @@ window.onkeydown = function(e)
         case 68: //D - right
             right = true;
             break;
-        case 32: //SPACE - up
+        case 86: //V - up
             up = true;
             break;
         case 67: //C - down
             down = true;
-            break;
-        case 13: //enter
-            sim.simulate();
             break;
         case 38: //up arrow
             sim.tileSet.selectNextRow();
@@ -61,7 +58,7 @@ window.onkeyup = function(e)
         case 68: //D - right
             right = false;
             break;
-        case 32: //SPACE - up
+        case 86: //V - up
             up = false;
             break;
         case 67: //C - down
@@ -94,4 +91,50 @@ function changeCam(cameraNumber)
 {
     gl.uniform1i(camNumberLoc, cameraNumber);
     currentCam = cams[cameraNumber];
+};
+
+function setSimSpeed(value)
+{
+    if(simSpeed != 0)
+        simSpeed = Math.pow(3, value);
+};
+
+function toggleDetail()
+{
+    detailed = !detailed;
+    needsRefresh = true;
+};
+
+function pause()
+{
+    simSpeed = 0;
+    document.getElementById('slider').style.background = 'FireBrick';
+};
+
+function play()
+{
+    simSpeed = 1;
+    setSimSpeed(document.getElementById('slider').value);
+    document.getElementById('slider').style.background = '#d3d3d3';
+};
+
+function restart()
+{
+    simSpeed = 0;
+    frameCounter = 0;
+    sim.restart();
+    needsRefresh = true;
+    document.getElementById('slider').style.background = 'FireBrick';
+};
+
+function toggleCursor()
+{
+    showCursor = !showCursor;
+    needsRefresh = true;
+};
+
+function end()
+{
+    simSpeed = maxSim;
+    document.getElementById('slider').style.background = 'FireBrick';
 };
