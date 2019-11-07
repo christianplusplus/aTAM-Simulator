@@ -108,12 +108,14 @@ function toggleDetail()
 function pause()
 {
     simSpeed = 0;
+    frameCounter = 0;
     document.getElementById('slider').style.background = 'FireBrick';
 };
 
 function play()
 {
     simSpeed = 1;
+    frameCounter = 0;
     setSimSpeed(document.getElementById('slider').value);
     document.getElementById('slider').style.background = '#d3d3d3';
 };
@@ -125,6 +127,10 @@ function restart()
     sim.restart();
     needsRefresh = true;
     document.getElementById('slider').style.background = 'FireBrick';
+    document.getElementById('pauseButton').disabled = false;
+    document.getElementById('stepButton').disabled = false;
+    document.getElementById('playButton').disabled = false;
+    document.getElementById('endButton').disabled = false;
 };
 
 function toggleCursor()
@@ -137,4 +143,20 @@ function end()
 {
     simSpeed = maxSim;
     document.getElementById('slider').style.background = 'FireBrick';
+};
+
+function requireRestart()
+{
+    document.getElementById('pauseButton').disabled = true;
+    document.getElementById('stepButton').disabled = true;
+    document.getElementById('playButton').disabled = true;
+    document.getElementById('endButton').disabled = true;
+    document.getElementById('slider').style.background = 'FireBrick';
+    simSpeed = 0;
+    frameCounter = 0;
+};
+
+function goToOrigin()
+{
+    cams[0].setTarget([0,0,0]);
 };

@@ -321,4 +321,8 @@ function Tile(tileName, tileColor, position, glueIDs, glueStrengths, isSeed)
         tile.init();
         return tile;
     };
+    
+    this.colorToString = function()
+    {
+    };
 };

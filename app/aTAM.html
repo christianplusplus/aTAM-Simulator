@@ -47,6 +47,26 @@ table
 {
     background-color: OrangeRed;
 }
+.buttonOr:disabled
+{
+    background-color: Grey;
+}
+.buttonYe
+{
+    background-color: Yellow;
+    margin: 0px;
+    width: 20px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+.buttonYe:hover
+{
+    background-color: Gold;
+}
+.buttonYe:disabled
+{
+    background-color: Grey;
+}
 .buttonGr
 {
     background-color: Lime;
@@ -208,22 +228,47 @@ Oops ... your browser doesn't support the HTML5 canvas element
             </tr>
             <tr>
                 <td><input class='buttonOr' type='image' src='../icons/restart.png' onclick='restart();'/></td>
-                <td><input class='buttonOr' type='image' src='../icons/pause.png' onclick='pause();'/></td>
-                <td><input class='buttonOr' type='image' src='../icons/step.png'/ onclick='sim.simulate();'></td>
-                <td><input class='buttonOr' type='image' src='../icons/play.png' onclick='play();'/></td>
-                <td><input class='buttonOr' type='image' src='../icons/end.png' onclick='end();'/></td>
+                <td><input class='buttonOr' id='pauseButton' type='image' src='../icons/pause.png' onclick='pause();'/></td>
+                <td><input class='buttonOr' id='stepButton' type='image' src='../icons/step.png'/ onclick='sim.simulate();'></td>
+                <td><input class='buttonOr' id='playButton' type='image' src='../icons/play.png' onclick='play();'/></td>
+                <td><input class='buttonOr' id='endButton' type='image' src='../icons/end.png' onclick='end();'/></td>
             </tr>
             <tr>
                 <td><input class='buttonGr' type='image' src='../icons/cube.png' onclick='toggleDetail();'/></td>
                 <td><input class='buttonGr' type='image' src='../icons/cursor.png' onclick='toggleCursor();'/></td>
-                <td></td>
+                <td><input class='buttonGr' type='image' src='../icons/origin.png' onclick='goToOrigin();'/></td>
                 <td><input class='buttonPr' type='image' src='../icons/upload.png'/></td>
                 <td><input class='buttonPr' type='image' src='../icons/download.png'/></td>
             </tr>
         </table>
     </td>
     <td>
-        <table>
+        <table cellspacing='0' cellpadding='0' style='margin-left:50px;'>
+            <tr>
+                <td><input class='buttonYe' type='image' src='../icons/open.png'/></td>
+                <td><b style='margin-left:20px; float:right;'>NAME:</b></td>
+                <td><input type='text'/ disabled></td>
+            </tr>
+            <tr>
+                <td><input class='buttonYe' type='image' src='../icons/new.png'/></td>
+                <td><b style='margin-left:20px; float:right;'>COLOR:</b></td>
+                <td><input type='text'/ disabled></td>
+            </tr>
+            <tr>
+                <td><input class='buttonYe' type='image' src='../icons/close.png'/></td>
+                <td><b style='margin-left:20px; float:right;'>GLUE IDS:</b></td>
+                <td><input type='text'/ disabled></td>
+            </tr>
+            <tr>
+                <td><input class='buttonYe' type='image' src='../icons/cancel.png'/></td>
+                <td><b style='margin-left:20px; float:right;'>STRENGTHS:</b></td>
+                <td><input type='text'/ disabled></td>
+            </tr>
+            <tr>
+                <td><input class='buttonYe' type='image' src='../icons/delete.png'/></td>
+                <td><b style='margin-left:20px; float:right;'>SEED:</b></td>
+                <td><input type='text'/ disabled></td>
+            </tr>
         </table>
     </td>
 </tr>
