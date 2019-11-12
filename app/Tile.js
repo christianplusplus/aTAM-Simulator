@@ -40,8 +40,9 @@ function Tile(tileName, tileColor, position, glueIDs, glueStrengths, isSeed)
     
     this.init = function()
     {
-        for(var i = 0; i < glueIDs.length; i++)
-            this.colors.push(this.colorHash(glueIDs[i]));
+        for(var i = 0; i < this.glueIDs.length; i++)
+            this.colors.push(this.colorHash(this.glueIDs[i]));
+        this.glueIDs = this.glueIDs.map(function(g){return String(g);});
     };
     
     this.initBuffers = function()
@@ -79,32 +80,32 @@ function Tile(tileName, tileColor, position, glueIDs, glueStrengths, isSeed)
         gl.uniform3fv(tileColorLoc, this.tileColor);
         gl.drawArrays(gl.TRIANGLE_FAN, viewingAngleOffset + 0, 8);
         
-        if(glueStrengths[colorAngleDict[angleNumber][0]] > 0)
+        if(this.glueStrengths[colorAngleDict[angleNumber][0]] > 0)
         {
             gl.uniform3fv(tileColorLoc, this.colors[colorAngleDict[angleNumber][0]]);
             gl.drawArrays(gl.TRIANGLE_FAN, viewingAngleOffset + 8, 8);
         }
-        if(glueStrengths[colorAngleDict[angleNumber][1]] > 0)
+        if(this.glueStrengths[colorAngleDict[angleNumber][1]] > 0)
         {
             gl.uniform3fv(tileColorLoc, this.colors[colorAngleDict[angleNumber][1]]);
             gl.drawArrays(gl.TRIANGLE_FAN, viewingAngleOffset + 16, 8);
         }
-        if(glueStrengths[colorAngleDict[angleNumber][2]] > 0)
+        if(this.glueStrengths[colorAngleDict[angleNumber][2]] > 0)
         {
             gl.uniform3fv(tileColorLoc, this.colors[colorAngleDict[angleNumber][2]]);
             gl.drawArrays(gl.TRIANGLE_FAN, viewingAngleOffset + 24, 8);
         }
-        if(glueStrengths[colorAngleDict[angleNumber][3]] > 0)
+        if(this.glueStrengths[colorAngleDict[angleNumber][3]] > 0)
         {
             gl.uniform3fv(tileColorLoc, this.colors[colorAngleDict[angleNumber][3]]);
             gl.drawArrays(gl.TRIANGLE_FAN, viewingAngleOffset + 32, 6);
         }
-        if(glueStrengths[colorAngleDict[angleNumber][4]] > 0)
+        if(this.glueStrengths[colorAngleDict[angleNumber][4]] > 0)
         {
             gl.uniform3fv(tileColorLoc, this.colors[colorAngleDict[angleNumber][4]]);
             gl.drawArrays(gl.TRIANGLE_FAN, viewingAngleOffset + 38, 6);
         }
-        if(glueStrengths[colorAngleDict[angleNumber][5]] > 0)
+        if(this.glueStrengths[colorAngleDict[angleNumber][5]] > 0)
         {
             gl.uniform3fv(tileColorLoc, this.colors[colorAngleDict[angleNumber][5]]);
             gl.drawArrays(gl.TRIANGLE_FAN, viewingAngleOffset + 44, 6);
@@ -324,5 +325,6 @@ function Tile(tileName, tileColor, position, glueIDs, glueStrengths, isSeed)
     
     this.colorToString = function()
     {
+        return this.tileColor.map(function(color){return Math.round(color * 255);}).join();
     };
 };

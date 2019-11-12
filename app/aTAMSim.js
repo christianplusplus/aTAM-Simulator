@@ -2,12 +2,12 @@ function aTAMSim(tileSet, temperature, maxSize)
 {
     this.assembly = new Map();
     this.frontier = [];
+    this.size = 0;
+    this.seeded = false;
     this.tileSet = tileSet;
     this.seed = tileSet.seed;
     this.temperature = temperature;
     this.maxSize = maxSize;
-    this.size = 0;
-    this.seeded = false;
     
     this.simulate = function()
     {

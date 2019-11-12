@@ -28,16 +28,20 @@ window.onkeydown = function(e)
             down = true;
             break;
         case 38: //up arrow
-            sim.tileSet.selectNextRow();
+            if(!isInspectingTile)
+                sim.tileSet.selectNextRow();
             break;
         case 37: //left arrow
-            sim.tileSet.selectPrev();
+            if(!isInspectingTile)
+                sim.tileSet.selectPrev();
             break;
         case 39: //right arrow
-            sim.tileSet.selectNext();
+            if(!isInspectingTile)
+                sim.tileSet.selectNext();
             break;
         case 40: //down arrow
-            sim.tileSet.selectPrevRow();
+            if(!isInspectingTile)
+                sim.tileSet.selectPrevRow();
             break;
     }
 };
@@ -159,4 +163,124 @@ function requireRestart()
 function goToOrigin()
 {
     cams[0].setTarget([0,0,0]);
+};
+
+var isNewTile = false;
+var isInspectingTile = false;
+var inspectedTile;
+
+
+function openTile()
+{
+    textBoxes.forEach(function(textBox){
+        textBox.disabled = false;
+    });
+    
+    inspectedTile = sim.tileSet.getSelectedTile();
+    
+    
+    textBoxes[0].value = inspectedTile.tileName;
+    textBoxes[1].value = inspectedTile.colorToString();
+    textBoxes[2].value = inspectedTile.glueIDs.join();
+    textBoxes[3].value = inspectedTile.glueStrengths.join();
+    textBoxes[4].value = inspectedTile.isSeed;
+    
+    isInspectingTile = true;
+    document.getElementById('closeButton').disabled = false;
+    document.getElementById('discardButton').disabled = false;
+    document.getElementById('destroyButton').disabled = false;
+};
+
+function newTile()
+{
+    isNewTile = true;
+    
+    textBoxes.forEach(function(textBox){
+        textBox.value = '';
+        textBox.disabled = false;
+    });
+    
+    isInspectingTile = true;
+    document.getElementById('closeButton').disabled = false;
+    document.getElementById('discardButton').disabled = false;
+    document.getElementById('destroyButton').disabled = true;
+};
+
+function closeTile()
+{
+    if(validateInput())
+    {
+        if(isNewTile)
+        {
+            sim.tileSet.add(new Tile('',[0,0,0],[0,0,0],['','','','','',''],[0,0,0,0,0,0],false));
+            inspectedTile = sim.tileSet.list[sim.tileSet.list.length - 1];
+        }
+        
+        inspectedTile.tileName = textBoxes[0].value;
+        
+        var color = textBoxes[1].value.split(',');
+        color = color.map(function(c){
+            return parseInt(c) / 255;
+        });
+        inspectedTile.tileColor = color;
+        
+        var glues = textBoxes[2].value.split(',');
+        inspectedTile.glueIDs = glues;
+        
+        var strengths = textBoxes[3].value.split(',');
+        strengths = strengths.map(function(s){return parseInt(s);});
+        inspectedTile.glueStrengths = strengths;
+        
+        inspectedTile.isSeed = textBoxes[4].value.toLowerCase() === 'true';
+        
+        inspectedTile.colors = inspectedTile.glueIDs.map(inspectedTile.colorHash);
+        
+        textBoxes.forEach(function(textBox){
+            textBox.value = '';
+            textBox.disabled = true;
+        });
+        
+        isNewTile = false;
+        isInspectingTile = false;
+        document.getElementById('closeButton').disabled = true;
+        document.getElementById('discardButton').disabled = true;
+        document.getElementById('destroyButton').disabled = true;
+        requireRestart();
+        needsRefresh = true;
+    }
+};
+
+function discardTile()
+{
+    textBoxes.forEach(function(textBox){
+        textBox.value = '';
+        textBox.disabled = true;
+    });
+    
+    isNewTile = false;
+    isInspectingTile = false;
+    document.getElementById('closeButton').disabled = true;
+    document.getElementById('discardButton').disabled = true;
+    document.getElementById('destroyButton').disabled = true;
+};
+
+function deleteTile()
+{
+    textBoxes.forEach(function(textBox){
+        textBox.value = '';
+        textBox.disabled = true;
+    });
+    
+    isNewTile = false;
+    isInspectingTile = false;
+    document.getElementById('closeButton').disabled = true;
+    document.getElementById('discardButton').disabled = true;
+    document.getElementById('destroyButton').disabled = true;
+    requireRestart();
+    needsRefresh = true;
+};
+
+function validateInput()
+{
+    return true;
 };

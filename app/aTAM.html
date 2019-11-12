@@ -221,6 +221,22 @@ Oops ... your browser doesn't support the HTML5 canvas element
                 <td class='key'>&rarr;<br></td>
         </tr></table>
     </td>
+    <td style='vertical-align:top;'>
+        <table>
+            <tr>
+                <td><img src='../icons/screen.png' width='30'/></td>
+                <td><img src='../icons/next.png' width='15'/></td>
+                <td><img src='../icons/click.png' width='30'/></td>
+                <td><img src='../icons/next.png' width='15'/></td>
+                <td><img src='../icons/drag.png' width='30'/></td>
+            </tr>
+            <tr>
+                <td><img src='../icons/screen.png' width='30'/></td>
+                <td><img src='../icons/next.png' width='15'/></td>
+                <td><img src='../icons/scroll.png' width='30'/></td>
+            </tr>
+        </table>
+    </td>
     <td>
         <table>
             <tr>
@@ -245,29 +261,29 @@ Oops ... your browser doesn't support the HTML5 canvas element
     <td>
         <table cellspacing='0' cellpadding='0' style='margin-left:50px;'>
             <tr>
-                <td><input class='buttonYe' type='image' src='../icons/open.png'/></td>
+                <td><input class='buttonYe' type='image' src='../icons/open.png' onclick='openTile();'/></td>
                 <td><b style='margin-left:20px; float:right;'>NAME:</b></td>
-                <td><input type='text'/ disabled></td>
+                <td><input type='text' id='text0' disabled/></td>
             </tr>
             <tr>
-                <td><input class='buttonYe' type='image' src='../icons/new.png'/></td>
+                <td><input class='buttonYe' type='image' src='../icons/new.png' onclick='newTile();'/></td>
                 <td><b style='margin-left:20px; float:right;'>COLOR:</b></td>
-                <td><input type='text'/ disabled></td>
+                <td><input type='text' id='text1' disabled/></td>
             </tr>
             <tr>
-                <td><input class='buttonYe' type='image' src='../icons/close.png'/></td>
+                <td><input class='buttonYe' id='closeButton' type='image' src='../icons/close.png' onclick='closeTile();' disabled/></td>
                 <td><b style='margin-left:20px; float:right;'>GLUE IDS:</b></td>
-                <td><input type='text'/ disabled></td>
+                <td><input type='text' id='text2' disabled/></td>
             </tr>
             <tr>
-                <td><input class='buttonYe' type='image' src='../icons/cancel.png'/></td>
+                <td><input class='buttonYe' id='discardButton' type='image' src='../icons/cancel.png' onclick='discardTile();' disabled/></td>
                 <td><b style='margin-left:20px; float:right;'>STRENGTHS:</b></td>
-                <td><input type='text'/ disabled></td>
+                <td><input type='text' id='text3' disabled/></td>
             </tr>
             <tr>
-                <td><input class='buttonYe' type='image' src='../icons/delete.png'/></td>
+                <td><input class='buttonYe' id='destroyButton' type='image' src='../icons/delete.png' onclick='deleteTile();' disabled/></td>
                 <td><b style='margin-left:20px; float:right;'>SEED:</b></td>
-                <td><input type='text'/ disabled></td>
+                <td><input type='text' id='text4' disabled/></td>
             </tr>
         </table>
     </td>

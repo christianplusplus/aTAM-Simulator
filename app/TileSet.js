@@ -14,6 +14,7 @@ function TileSet()
     
     this.add = function(tile)
     {
+        tile = tile.copyAt(this.pointerToPosString());
         if(tile.isSeed)
         {
             if(this.hasSeed)
@@ -22,7 +23,7 @@ function TileSet()
             this.seed = tile;
             tile.initBuffers();
         }
-        this.list.push(tile.copyAt(this.pointerToPosString()));
+        this.list.push(tile);
         for(var i = 0; i < 6; i++)
         {
             if(tile.glueStrengths[i] > 0)
@@ -109,5 +110,10 @@ function TileSet()
     this.pointerToPosString = function()
     {
         return 2 * (this.counter % rowSize) + ',' + 2 * Math.floor(this.counter / rowSize) + ',0';
+    };
+    
+    this.getSelectedTile = function()
+    {
+        return this.list[this.pointer];
     };
 };

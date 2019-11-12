@@ -21,6 +21,7 @@ var frameCounter = 0;
 var simSpeed = 0;
 var detailed = false;
 var showCursor = true;
+var textBoxes = [];
 
 const beige = [255./255, 204./255, 153./255];
 const white = [1., 1., 1.];
@@ -88,7 +89,7 @@ window.onload = function()
     
     //Demo
     var ts = new TileSet();
-    var N = 21; //16 for fast draw
+    var N = 2; //16 for fast draw
     ts.add(new Tile("Seed", brown, [0,0,0], [0,0,0,0,0,0], [2,2,2,0,0,0], true));
     for(var i = 0; i < N - 1; i++)
     {
@@ -154,6 +155,8 @@ function refresh()
 
 function makeEvents()
 {
+    for(var i = 0; i < 5; i++)
+        textBoxes.push(document.getElementById('text' + i));
     canvas.onmousedown = function(){
         if(event.clientX < canvas.width / 2)
             cams[0].startRotatingCam();
