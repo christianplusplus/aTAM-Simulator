@@ -18,28 +18,78 @@ function TileSet()
         if(tile.isSeed)
         {
             if(this.hasSeed)
-                throw "Can't add more than one seed to a tile set.";
-            this.hasSeed = true;
+                this.seed.isSeed = false;
+            else
+            {
+                this.hasSeed = true;
+                tile.initBuffers();
+            }
             this.seed = tile;
-            tile.initBuffers();
         }
         this.list.push(tile);
-        for(var i = 0; i < 6; i++)
+        for(var f = 0; f < 6; f++)
         {
-            if(tile.glueStrengths[i] > 0)
+            if(tile.glueStrengths[f] > 0)
             {
-                if(this.glueList[i][tile.glueIDs[i]] === undefined)
-                    this.glueList[i][tile.glueIDs[i]] = [];
-                this.glueList[i][tile.glueIDs[i]].push(tile);
+                if(this.glueList[f][tile.glueIDs[f]] === undefined)
+                    this.glueList[f][tile.glueIDs[f]] = [];
+                this.glueList[f][tile.glueIDs[f]].push(tile);
             }
         }
         this.counter++;
+    };
+    
+    //these next three functions need work. crunching is O(N) work.
+    //maybe that is fine on delete, but should really be O(1) on change.
+    this.changeSelected = function(tileName, tileColor, glueIDs, glueStrengths, isSeed)
+    {
+        var temp = this.pointer;
+        this.deleteSelected();
+        this.add(new Tile(tileName, tileColor, [0,0,0], glueIDs, glueStrengths, isSeed));
+        this.pointer = temp;
+        this.list.splice(this.pointer, 0, this.list.splice(this.list.length - 1, 1)[0]);//shifts to the correct index
+        this.crunch();
+    };
+    
+    this.deleteSelected = function()
+    {
+        var tile = this.list[this.pointer];
+        if(this.list[this.pointer] === this.seed)
+            this.hasSeed = false;
+        for(var f = 0; f < 6; f++)
+        {
+            if(tile.glueStrengths[f] > 0)
+            {
+                var table = this.glueList[f][tile.glueIDs[f]];
+                table.splice(table.indexOf(tile), 1);
+                if(table.length == 0)
+                    delete this.glueList[f][tile.glueIDs[f]];
+            }
+        }
+        this.list.splice(this.pointer, 1);
+        this.counter--;
+        this.crunch();
+        if(this.pointer >= this.list.length && this.list.length > 0)
+            this.pointer = this.list.length - 1;
+    };
+    
+    this.crunch = function()
+    {
+        for(var i = 0; i < this.list.length; i++)
+            this.list[i].updatePosition(this.pointerToPosString(i).split(',').map(Number));
     };
     
     this.draw = function()
     {
         this.list.forEach(function(tile){
             tile.draw();
+        });
+    };
+    
+    this.fastDraw = function()
+    {
+        this.list.forEach(function(tile){
+            tile.fastDraw();
         });
     };
     
@@ -107,9 +157,11 @@ function TileSet()
             cam.setTarget([pointerPosition[0] + camAdjustmentRange, target[1], target[2]]);
     };
     
-    this.pointerToPosString = function()
+    this.pointerToPosString = function(pointer)
     {
-        return 2 * (this.counter % rowSize) + ',' + 2 * Math.floor(this.counter / rowSize) + ',0';
+        if(arguments.length == 0)
+            return 2 * (this.counter % rowSize) + ',' + 2 * Math.floor(this.counter / rowSize) + ',0';
+        return 2 * (pointer % rowSize) + ',' + 2 * Math.floor(pointer / rowSize) + ',0';
     };
     
     this.getSelectedTile = function()

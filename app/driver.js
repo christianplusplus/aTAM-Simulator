@@ -12,6 +12,7 @@ var lightOnLoc;
 var lightSrcLoc;
 
 const maxSim = 10000;
+const defaultTemp = 2;
 var currentCam;
 var cams = [];
 var sim;
@@ -89,7 +90,7 @@ window.onload = function()
     
     //Demo
     var ts = new TileSet();
-    var N = 15; //16 for fast draw
+    var N = 2; //16 for fast draw
     ts.add(new Tile("Seed", brown, [0,0,0], [0,0,0,0,0,0], [2,2,2,0,0,0], true));
     for(var i = 0; i < N - 1; i++)
     {
@@ -100,10 +101,9 @@ window.onload = function()
     ts.add(new Tile("Filler", green, [0,0,0], ["xy","xy",N,"xy","xy",0], [1,1,1,1,1,0], false));
     ts.add(new Tile("Filler", green, [0,0,0], ["xz",N,"xz","xz",0,"xz"], [1,1,1,1,0,1], false));
     ts.add(new Tile("Filler", green, [0,0,0], [N,"yz","yz",0,"yz","yz"], [1,1,1,0,1,1], false));
-    ts.add(new Tile("Filler", blue, [0,0,0], [N,N,N,N,N,N], [1,1,1,1,1,1], false));
+    ts.add(new Tile("Filler3D", blue, [0,0,0], [N,N,N,N,N,N], [1,1,1,1,1,1], false));
     
-    sim = new aTAMSim(ts, 2, maxSim);
-    //while(sim.simulate());
+    sim = new aTAMSim(ts, defaultTemp, maxSim);
     
     cursor = new Cursor();
     cursor.initBuffers();
@@ -147,8 +147,11 @@ function refresh()
     
     gl.viewport(canvas.width/2, 0, canvas.width/2, canvas.height);
     changeCam(1);
-    gl.uniform1i(lightOnLoc, true);
-    gl.uniform3fv(lightSrcLoc, sim.tileSet.list[sim.tileSet.pointer].position);
+    if(sim.tileSet.list.length > 0)
+    {
+        gl.uniform1i(lightOnLoc, true);
+        gl.uniform3fv(lightSrcLoc, sim.tileSet.list[sim.tileSet.pointer].position);
+    }
     
     sim.tileSet.draw();
 };
@@ -181,6 +184,7 @@ function makeEvents()
     window.onresize = function(){resizeWindow();};
 };
 
+//found this hashing function on stack overflow
 String.prototype.hashCode = function(){
   var hash = 0, i, chr;
   if (this.length === 0) return hash;

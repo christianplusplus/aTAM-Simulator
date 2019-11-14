@@ -79,6 +79,8 @@ function aTAMSim(tileSet, temperature, maxSize)
         }
         else
         {
+            if(!this.tileSet.hasSeed)
+                return false;
             position = "0,0,0";
             tile = this.tileSet.seed.copyAt(position);
             this.seeded = true;

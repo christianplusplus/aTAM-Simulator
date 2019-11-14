@@ -7,6 +7,8 @@ var down = false;
 
 window.onkeydown = function(e)
 {
+    if(isInspectingTile)
+        return;
     switch(e.keyCode)
     {
         case 87: //W - fowards
@@ -28,20 +30,16 @@ window.onkeydown = function(e)
             down = true;
             break;
         case 38: //up arrow
-            if(!isInspectingTile)
-                sim.tileSet.selectNextRow();
+            sim.tileSet.selectNextRow();
             break;
         case 37: //left arrow
-            if(!isInspectingTile)
-                sim.tileSet.selectPrev();
+            sim.tileSet.selectPrev();
             break;
         case 39: //right arrow
-            if(!isInspectingTile)
-                sim.tileSet.selectNext();
+            sim.tileSet.selectNext();
             break;
         case 40: //down arrow
-            if(!isInspectingTile)
-                sim.tileSet.selectPrevRow();
+            sim.tileSet.selectPrevRow();
             break;
     }
 };
@@ -195,11 +193,15 @@ function newTile()
 {
     isNewTile = true;
     
+    textBoxes[0].value = 'new';
+    textBoxes[1].value = '255,255,255';
+    textBoxes[2].value = 'a,b,c,d,e,f';
+    textBoxes[3].value = '1,1,1,1,1,1';
+    textBoxes[4].value = 'false';
+    
     textBoxes.forEach(function(textBox){
-        textBox.value = '';
         textBox.disabled = false;
     });
-    
     isInspectingTile = true;
     document.getElementById('closeButton').disabled = false;
     document.getElementById('discardButton').disabled = false;
@@ -210,30 +212,23 @@ function closeTile()
 {
     if(validateInput())
     {
-        if(isNewTile)
-        {
-            sim.tileSet.add(new Tile('',[0,0,0],[0,0,0],['','','','','',''],[0,0,0,0,0,0],false));
-            inspectedTile = sim.tileSet.list[sim.tileSet.list.length - 1];
-        }
-        
-        inspectedTile.tileName = textBoxes[0].value;
+        var tileName = textBoxes[0].value.trim();
         
         var color = textBoxes[1].value.split(',');
-        color = color.map(function(c){
-            return parseInt(c) / 255;
-        });
-        inspectedTile.tileColor = color;
+        color = color.map(function(c){return parseInt(c) / 255;});
         
         var glues = textBoxes[2].value.split(',');
-        inspectedTile.glueIDs = glues;
+        glues = glues.map(function(g){return g.trim();});
         
         var strengths = textBoxes[3].value.split(',');
         strengths = strengths.map(function(s){return parseInt(s);});
-        inspectedTile.glueStrengths = strengths;
         
-        inspectedTile.isSeed = textBoxes[4].value.toLowerCase() === 'true';
+        var isSeed = textBoxes[4].value.trim().toLowerCase() === 'true';
         
-        inspectedTile.colors = inspectedTile.glueIDs.map(inspectedTile.colorHash);
+        if(isNewTile)
+            sim.tileSet.add(new Tile(tileName, color, [0,0,0], glues, strengths, isSeed));
+        else
+            sim.tileSet.changeSelected(tileName, color, glues, strengths, isSeed)
         
         textBoxes.forEach(function(textBox){
             textBox.value = '';
@@ -266,11 +261,12 @@ function discardTile()
 
 function deleteTile()
 {
+    sim.tileSet.deleteSelected();
+    
     textBoxes.forEach(function(textBox){
         textBox.value = '';
         textBox.disabled = true;
     });
-    
     isNewTile = false;
     isInspectingTile = false;
     document.getElementById('closeButton').disabled = true;
@@ -282,5 +278,41 @@ function deleteTile()
 
 function validateInput()
 {
+    var boolRegExp = new RegExp('^\\s*(true|false)\\s*$', 'i');
+    var digit255RegExp = new RegExp('(25[0-5]|[2][0-4]\\d|[1]\\d\\d|[1-9]\\d|\\d)');
+    var colorRegExp = new RegExp('^\\s*' + digit255RegExp.source + '\\s*,\\s*' + digit255RegExp.source + '\\s*,\\s*' + digit255RegExp.source + '\\s*$');
+    var glueRegExp = new RegExp('^\\s*\\S+\\s*(,\\s*\\S+\\s*){5}$');
+    var strengthsRegExp = new RegExp('^\\s*([1-9]\\d*|\\d)\\s*(,\\s*([1-9]\\d*|\\d)\\s*){5}$');
+    
+    if(textBoxes[0].value.trim().length == 0)
+    {
+        alert('This tile needs a name!');
+        return false;
+    }
+    
+    if(!colorRegExp.test(textBoxes[1].value))
+    {
+        alert('Expected "[0-255],[0-255],[0-255]" for COLOR.')
+        return false;
+    }
+    
+    if(!glueRegExp.test(textBoxes[2].value) || textBoxes[2].value.split(',').length != 6)
+    {
+        alert('Expected "[string],[string],[string],[string],[string],[string]" for GLUE IDS.')
+        return false;
+    }
+    
+    if(!strengthsRegExp.test(textBoxes[3].value))
+    {
+        alert('Expected "[unsigned int],[unsigned int],[unsigned int],[unsigned int],[unsigned int],[unsigned int]" for STRENGTHS.');
+        return false;
+    }
+    
+    if(!boolRegExp.test(textBoxes[4].value))
+    {
+        alert('Expected either "true" or "false" for SEED.');
+        return false;
+    }
+    
     return true;
 };

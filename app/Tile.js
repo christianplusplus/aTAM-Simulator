@@ -40,9 +40,9 @@ function Tile(tileName, tileColor, position, glueIDs, glueStrengths, isSeed)
     
     this.init = function()
     {
-        for(var i = 0; i < this.glueIDs.length; i++)
-            this.colors.push(this.colorHash(this.glueIDs[i]));
         this.glueIDs = this.glueIDs.map(function(g){return String(g);});
+        for(var i = 0; i < this.glueIDs.length; i++)
+            this.colors[i] = this.colorHash(this.glueIDs[i]);
     };
     
     this.initBuffers = function()
@@ -326,5 +326,11 @@ function Tile(tileName, tileColor, position, glueIDs, glueStrengths, isSeed)
     this.colorToString = function()
     {
         return this.tileColor.map(function(color){return Math.round(color * 255);}).join();
+    };
+    
+    this.updatePosition = function(position)
+    {
+        this.position = position;
+        this.modelViewMatrix = mat4(1,0,0,position[0],0,1,0,position[1],0,0,1,position[2],0,0,0,1);
     };
 };
