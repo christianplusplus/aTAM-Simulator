@@ -1,5 +1,6 @@
 const rowSize = 5;
 const camDiligence = 6;
+const glueOrder = ['EAST', 'UP', 'SOUTH', 'WEST', 'DOWN', 'NORTH'];
 
 function TileSet()
 {
@@ -44,8 +45,9 @@ function TileSet()
     this.changeSelected = function(tileName, tileColor, glueIDs, glueStrengths, isSeed)
     {
         var temp = this.pointer;
+        var label = this.getSelectedTile().label;
         this.deleteSelected();
-        this.add(new Tile(tileName, tileColor, [0,0,0], glueIDs, glueStrengths, isSeed));
+        this.add(new Tile(tileName, tileColor, [0,0,0], glueIDs, glueStrengths, isSeed, label));
         this.pointer = temp;
         this.list.splice(this.pointer, 0, this.list.splice(this.list.length - 1, 1)[0]);//shifts to the correct index
         this.crunch();
@@ -167,5 +169,37 @@ function TileSet()
     this.getSelectedTile = function()
     {
         return this.list[this.pointer];
+    };
+    
+    this.getTilesAsText = function()
+    {
+        var page = [];
+        var usedNames = [];
+        this.list.forEach(function(tile){
+            var attributes = [];
+            
+            var name = tile.tileName;
+            var i = 1;
+            var appendedName = name;
+            while(usedNames.includes(appendedName))
+                appendedName = name + '(' + (i++) + ')';
+            usedNames.push(appendedName);
+            
+            attributes.push('TILENAME ' + appendedName);
+            if(tile.label.length > 0)
+                attributes.push('LABEL ' + tile.label);
+            for(var f = 0; f < 6; f++)
+            {
+                if(tile.glueStrengths[f] > 0)
+                {
+                    attributes.push(glueOrder[f] + 'BIND ' + tile.glueStrengths[f]);
+                    attributes.push(glueOrder[f] + 'LABEL ' + tile.glueIDs[f]);
+                }
+            }
+            attributes.push('CREATE');
+            page.push(attributes.join('\n'));
+            page.push('\n');
+        });
+        return page.join('\n');
     };
 };

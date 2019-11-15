@@ -316,3 +316,19 @@ function validateInput()
     
     return true;
 };
+
+function downloadTDS()
+{
+    var fileName = prompt('Please name your tile set files.\n.tds and .tdp will be appended automatically.', '');
+    if(fileName == null)
+        return;
+    var TDSText = sim.tileSet.getTilesAsText();
+    download(TDSText, fileName + '.tds', 'text/plain');
+    var TDPText = [];
+    TDPText.push(fileName + '.tds');
+    TDPText.push('Temperature=' + sim.temperature);
+    TDPText.push(sim.tileSet.seed.tileName + ' ' + sim.tileSet.seed.position.join(' '));
+    TDPText.push('');
+    TDPText = TDPText.join('\n');
+    download(TDPText, fileName + '.tdp', 'text/plain');
+};

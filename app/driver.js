@@ -90,7 +90,7 @@ window.onload = function()
     
     //Demo
     var ts = new TileSet();
-    var N = 2; //16 for fast draw
+    var N = 3; //16 for fast draw
     ts.add(new Tile("Seed", brown, [0,0,0], [0,0,0,0,0,0], [2,2,2,0,0,0], true));
     for(var i = 0; i < N - 1; i++)
     {

@@ -27,7 +27,7 @@ const colorAngleDict = [
  * glueIDs - int[x,y,z,nx,ny,nz]
  * isSeed - boolean
  */
-function Tile(tileName, tileColor, position, glueIDs, glueStrengths, isSeed)
+function Tile(tileName, tileColor, position, glueIDs, glueStrengths, isSeed, label)
 {
     this.tileName = tileName;
     this.tileColor = tileColor;
@@ -37,6 +37,10 @@ function Tile(tileName, tileColor, position, glueIDs, glueStrengths, isSeed)
     this.isSeed = isSeed;
     this.colors = [];
     this.modelViewMatrix = mat4(1,0,0,position[0],0,1,0,position[1],0,0,1,position[2],0,0,0,1);
+    if(arguments.length >= 7)
+        this.label = label;
+    else
+        this.label = '';
     
     this.init = function()
     {
@@ -318,7 +322,7 @@ function Tile(tileName, tileColor, position, glueIDs, glueStrengths, isSeed)
     {
         var stringCoords = keyString.split(',');
         var coords = [parseInt(stringCoords[0]), parseInt(stringCoords[1]), parseInt(stringCoords[2])];
-        var tile = new Tile(this.tileName, this.tileColor, coords, this.glueIDs, this.glueStrengths, this.isSeed);
+        var tile = new Tile(this.tileName, this.tileColor, coords, this.glueIDs, this.glueStrengths, this.isSeed, this.label);
         tile.init();
         return tile;
     };
