@@ -38,7 +38,7 @@ function TileSet()
             }
         }
         this.counter++;
-    };
+    }
     
     //these next three functions need work. crunching is O(N) work.
     //maybe that is fine on delete, but should really be O(1) on change.
@@ -51,7 +51,7 @@ function TileSet()
         this.pointer = temp;
         this.list.splice(this.pointer, 0, this.list.splice(this.list.length - 1, 1)[0]);//shifts to the correct index
         this.crunch();
-    };
+    }
     
     this.deleteSelected = function()
     {
@@ -73,27 +73,27 @@ function TileSet()
         this.crunch();
         if(this.pointer >= this.list.length && this.list.length > 0)
             this.pointer = this.list.length - 1;
-    };
+    }
     
     this.crunch = function()
     {
         for(var i = 0; i < this.list.length; i++)
             this.list[i].updatePosition(this.pointerToPosString(i).split(',').map(Number));
-    };
+    }
     
     this.draw = function()
     {
         this.list.forEach(function(tile){
             tile.draw();
         });
-    };
+    }
     
     this.fastDraw = function()
     {
         this.list.forEach(function(tile){
             tile.fastDraw();
         });
-    };
+    }
     
     this.selectNext = function()
     {
@@ -103,7 +103,7 @@ function TileSet()
             needsRefresh = true;
             this.adjustCam();
         }
-    };
+    }
     
     this.selectPrev = function()
     {
@@ -113,7 +113,7 @@ function TileSet()
             needsRefresh = true;
             this.adjustCam();
         }
-    };
+    }
     
     this.selectNextRow = function()
     {
@@ -123,7 +123,7 @@ function TileSet()
             needsRefresh = true;
             this.adjustCam();
         }
-    };
+    }
     
     this.selectPrevRow = function()
     {
@@ -133,7 +133,7 @@ function TileSet()
             needsRefresh = true;
             this.adjustCam();
         }
-    };
+    }
     
     this.adjustCam = function()
     {
@@ -157,21 +157,37 @@ function TileSet()
             cam.setTarget([pointerPosition[0] - camAdjustmentRange, target[1], target[2]]);
         else if(target[0] - pointerPosition[0] > camAdjustmentRange)
             cam.setTarget([pointerPosition[0] + camAdjustmentRange, target[1], target[2]]);
-    };
+    }
     
     this.pointerToPosString = function(pointer)
     {
         if(arguments.length == 0)
             return 2 * (this.counter % rowSize) + ',' + 2 * Math.floor(this.counter / rowSize) + ',0';
         return 2 * (pointer % rowSize) + ',' + 2 * Math.floor(pointer / rowSize) + ',0';
-    };
+    }
     
     this.getSelectedTile = function()
     {
         return this.list[this.pointer];
-    };
+    }
     
-    this.getTilesAsText = function()
+    this.getTilesAsSTSText = function()
+    {
+        var page = [];
+        this.list.forEach(function(tile){
+            var attributes = [];
+            attributes.push(tile.tileName);
+            attributes.push(tile.label);
+            attributes.push(tile.tileColor.join());
+            attributes.push(tile.glueIDs.join());
+            attributes.push(tile.glueStrengths.join());
+            attributes.push(String(tile.isSeed));
+            page.push(attributes.join('\n'));
+        });
+        return page.join('\n--\n');
+    }
+    
+    this.getTilesAsTDSText = function()
     {
         var page = [];
         var usedNames = [];
@@ -201,5 +217,5 @@ function TileSet()
             page.push('\n');
         });
         return page.join('\n');
-    };
-};
+    }
+}

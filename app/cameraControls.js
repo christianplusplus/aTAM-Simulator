@@ -29,7 +29,7 @@ window.onkeydown = function(e)
         case 13: //enter
             sim.simulate();
     }
-};
+}
 
 window.onkeyup = function(e)
 {
@@ -53,7 +53,7 @@ window.onkeyup = function(e)
         case 67: //C - down
             down = false;
     }
-};
+}
 
 window.onwheel = function(e)
 {
@@ -62,7 +62,7 @@ window.onwheel = function(e)
     else
         camRange = Math.max(maxZoom, camRange / zoomSpeed);
     cams[0].updateCam();
-};
+}
 
 
 
@@ -71,10 +71,10 @@ function resizeWindow()
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     cams.forEach(function(cam){cam.updateProjection();});
-};
+}
 
 function changeCam(cameraNumber)
 {
     gl.uniform1i(camNumberLoc, cameraNumber);
     currentCam = cams[cameraNumber];
-};
+}

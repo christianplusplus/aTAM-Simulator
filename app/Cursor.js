@@ -21,7 +21,7 @@ function Cursor()
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(flatten(vertices)), gl.STATIC_DRAW);
         cursorVertexAttribute = gl.getAttribLocation(program, "vPosition");
         gl.enableVertexAttribArray(cursorVertexAttribute);//might be bad to put this here.
-    };
+    }
     
     this.draw = function()
     {
@@ -46,7 +46,7 @@ function Cursor()
         gl.uniform3fv(cursorColorLoc, cursorLineColor);
         for(var i = 12; i < 24; i += 4)
             gl.drawArrays(gl.LINE_LOOP, i, 4);
-    };
+    }
     
     this.buildModel = function()
     {
@@ -86,5 +86,5 @@ function Cursor()
         vertices.push([0,0,pr]);
         
         return vertices;
-    };
-};
+    }
+}

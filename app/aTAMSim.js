@@ -96,7 +96,7 @@ function aTAMSim(tileSet, temperature, maxSize)
         this.size++;
         needsRefresh = true;
         return true;
-    };
+    }
     
     this.restart = function()
     {
@@ -110,13 +110,13 @@ function aTAMSim(tileSet, temperature, maxSize)
     {
         for(var tile of this.assembly.values())
             tile.draw();
-    };
+    }
     
     this.fastDraw = function()
     {
         for(var tile of this.assembly.values())
             tile.fastDraw();
-    };
+    }
     
     this.getNeighbors = function(keyString)
     {
@@ -132,5 +132,5 @@ function aTAMSim(tileSet, temperature, maxSize)
         keys.push([key[0], key[1] - 1, key[2]].join());
         keys.push([key[0], key[1], key[2] - 1].join());
         return keys;
-    };
-};
+    }
+}

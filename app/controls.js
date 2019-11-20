@@ -42,7 +42,7 @@ window.onkeydown = function(e)
             sim.tileSet.selectPrevRow();
             break;
     }
-};
+}
 
 window.onkeyup = function(e)
 {
@@ -66,7 +66,7 @@ window.onkeyup = function(e)
         case 67: //C - down
             down = false;
     }
-};
+}
 
 window.onwheel = function(e)
 {
@@ -76,7 +76,7 @@ window.onwheel = function(e)
     else
         cams[camNumber].range = Math.max(maxZoom, cams[camNumber].range / zoomSpeed);
     cams[camNumber].updateCam();
-};
+}
 
 
 
@@ -87,32 +87,32 @@ function resizeWindow()
     cams.forEach(function(cam){
         cam.updateProjection();
     });
-};
+}
 
 function changeCam(cameraNumber)
 {
     gl.uniform1i(camNumberLoc, cameraNumber);
     currentCam = cams[cameraNumber];
-};
+}
 
 function setSimSpeed(value)
 {
     if(simSpeed != 0)
         simSpeed = Math.pow(3, value);
-};
+}
 
 function toggleDetail()
 {
     detailed = !detailed;
     needsRefresh = true;
-};
+}
 
 function pause()
 {
     simSpeed = 0;
     frameCounter = 0;
     document.getElementById('slider').style.background = 'FireBrick';
-};
+}
 
 function play()
 {
@@ -120,7 +120,7 @@ function play()
     frameCounter = 0;
     setSimSpeed(document.getElementById('slider').value);
     document.getElementById('slider').style.background = '#d3d3d3';
-};
+}
 
 function restart()
 {
@@ -133,19 +133,19 @@ function restart()
     document.getElementById('stepButton').disabled = false;
     document.getElementById('playButton').disabled = false;
     document.getElementById('endButton').disabled = false;
-};
+}
 
 function toggleCursor()
 {
     showCursor = !showCursor;
     needsRefresh = true;
-};
+}
 
 function end()
 {
     simSpeed = maxSim;
     document.getElementById('slider').style.background = 'FireBrick';
-};
+}
 
 function requireRestart()
 {
@@ -156,12 +156,12 @@ function requireRestart()
     document.getElementById('slider').style.background = 'FireBrick';
     simSpeed = 0;
     frameCounter = 0;
-};
+}
 
 function goToOrigin()
 {
     cams[0].setTarget([0,0,0]);
-};
+}
 
 var isNewTile = false;
 var isInspectingTile = false;
@@ -187,7 +187,7 @@ function openTile()
     document.getElementById('closeButton').disabled = false;
     document.getElementById('discardButton').disabled = false;
     document.getElementById('destroyButton').disabled = false;
-};
+}
 
 function newTile()
 {
@@ -206,7 +206,7 @@ function newTile()
     document.getElementById('closeButton').disabled = false;
     document.getElementById('discardButton').disabled = false;
     document.getElementById('destroyButton').disabled = true;
-};
+}
 
 function closeTile()
 {
@@ -243,7 +243,7 @@ function closeTile()
         requireRestart();
         needsRefresh = true;
     }
-};
+}
 
 function discardTile()
 {
@@ -257,7 +257,7 @@ function discardTile()
     document.getElementById('closeButton').disabled = true;
     document.getElementById('discardButton').disabled = true;
     document.getElementById('destroyButton').disabled = true;
-};
+}
 
 function deleteTile()
 {
@@ -274,14 +274,14 @@ function deleteTile()
     document.getElementById('destroyButton').disabled = true;
     requireRestart();
     needsRefresh = true;
-};
+}
 
 function validateInput()
 {
     var boolRegExp = new RegExp('^\\s*(true|false)\\s*$', 'i');
     var digit255RegExp = new RegExp('(25[0-5]|[2][0-4]\\d|[1]\\d\\d|[1-9]\\d|\\d)');
     var colorRegExp = new RegExp('^\\s*' + digit255RegExp.source + '\\s*,\\s*' + digit255RegExp.source + '\\s*,\\s*' + digit255RegExp.source + '\\s*$');
-    var glueRegExp = new RegExp('^\\s*\\S+\\s*(,\\s*\\S+\\s*){5}$');
+    //var glueRegExp = new RegExp('^\\s*\\S+\\s*(,\\s*\\S+\\s*){5}$'); Not needed.
     var strengthsRegExp = new RegExp('^\\s*([1-9]\\d*|\\d)\\s*(,\\s*([1-9]\\d*|\\d)\\s*){5}$');
     
     if(textBoxes[0].value.trim().length == 0)
@@ -296,7 +296,7 @@ function validateInput()
         return false;
     }
     
-    if(!glueRegExp.test(textBoxes[2].value) || textBoxes[2].value.split(',').length != 6)
+    if(textBoxes[2].value.split(',').length != 6)
     {
         alert('Expected "[string],[string],[string],[string],[string],[string]" for GLUE IDS.')
         return false;
@@ -315,15 +315,86 @@ function validateInput()
     }
     
     return true;
-};
+}
 
-function downloadTDS()
+var lastRequest = '';
+var lastFileName = '';
+
+function requestDownload()
 {
-    var fileName = prompt('Please name your tile set files.\n.tds and .tdp will be appended automatically.', '');
+    //prompt and test file types
+    var query = prompt('Please list the file extensions/types you want.\n.sts, .tdp, and .tds are supported.\nExample: ".tds .tdp"\nSee README for file format descriptions.', lastRequest);
+    var fileRegExp = new RegExp('(\\s*(\\.sts|\\.tdp|\\.tds))+\\s*');
+    if(!fileRegExp.test(query))
+    {
+        alert('Expected something like ".sts .tds .tdp".');
+        return;
+    }
+    
+    //prompt and test file names
+    var fileName = prompt('Name the download file(s).\nDon\'t worry about extensions.', lastFileName);
     if(fileName == null)
         return;
-    var TDSText = sim.tileSet.getTilesAsText();
+    lastFileName = fileName;
+    
+    //format the request
+    query = query.replace(/\./g, ' .');
+    query = query.replace(/w/g, ' ');
+    query = superTrim(query);
+    query = query.split(' ');
+    var dList = [];
+    query.forEach(function(type){dList[type] = 0;});
+    
+    //format lastRequest (to remember previous requests)
+    query = [];
+    for(var type in dList)
+        query.push(type);
+    lastRequest = query.join(' ');
+    
+    //call relevant download functions
+    for(var type in dList)
+    {
+        switch(type)
+        {
+            case '.sts':
+                downloadSTS(fileName);
+                break;
+            case '.tdp':
+                downloadTDP(fileName);
+                break;
+            case '.tds':
+                downloadTDS(fileName);
+                break;
+        }
+    }
+}
+
+function superTrim(string)
+{
+    string = string.trim();
+    var newString = string.replace('  ', ' ');
+    while(newString != string)
+    {
+        string = newString;
+        newString = string.replace('  ', ' ');
+    }
+    return newString;
+}
+
+function downloadSTS(fileName)
+{
+    var TDSText = sim.tileSet.getTilesAsSTSText();
+    download(TDSText, fileName + '.sts', 'text/plain');
+}
+
+function downloadTDS(fileName)
+{
+    var TDSText = sim.tileSet.getTilesAsTDSText();
     download(TDSText, fileName + '.tds', 'text/plain');
+}
+
+function downloadTDP(fileName)
+{
     var TDPText = [];
     TDPText.push(fileName + '.tds');
     TDPText.push('Temperature=' + sim.temperature);
@@ -331,4 +402,125 @@ function downloadTDS()
     TDPText.push('');
     TDPText = TDPText.join('\n');
     download(TDPText, fileName + '.tdp', 'text/plain');
-};
+}
+
+function upload(file)
+{
+    document.getElementById('hiddenFileElement').value = null;
+    var reader = new FileReader();
+    reader.onload = function(event)
+    {
+        var contents = event.target.result;
+        var tileSet;
+        switch(file.name.substring(file.name.length - 4))
+        {
+            case '.sts':
+                tileSet = makeTileSetWithSTS(contents);
+                break;
+            case '.tds':
+                tileSet = makeTileSetWithTDS(contents);
+                break;
+            default:
+                alert('Not the correct file type.');
+                return;
+        }
+        pause();
+        sim.tileSet = tileSet;
+        sim.restart();
+        needsRefresh = true;
+        discardTile();
+    };
+    reader.readAsText(file);
+}
+
+function makeTileSetWithSTS(contents)
+{
+    var ts = new TileSet();
+    contents = contents.split('\n--\n');
+    for(var tile of contents)
+    {
+        tile = tile.split('\n');
+        ts.add(new Tile(tile[0], tile[2].split(',').map(Number), [0,0,0], tile[3].split(','), tile[4].split(',').map(Number), tile[5] == 'true', tile[1]));
+    }
+    return ts;
+}
+
+function makeTileSetWithTDS(contents)
+{
+    var ts = new TileSet();
+    var seedName = prompt('What is the seed\'s name?\nYou can add/edit a seed tile later if you want.', '');
+    
+    (contents = contents.split(/\s*CREATE\s*/m)).pop();
+    for(var tile of contents)
+    {
+        var name = 'default';
+        var label = '';
+        var color = beige.slice();
+        var glueIDs = ['','','','','',''];
+        var glueStrengths = [0,0,0,0,0,0];
+        var isSeed = false;
+        
+        tile = tile.split('\n');
+        for(var attribute of tile)
+        {
+            var words = attribute.match(/\S+/g);
+            if(words == null || words.length < 2)
+                continue;
+            var type = words[0];
+            var data = words[1];
+            switch(type)
+            {
+                case 'TILENAME':
+                    name = data;
+                    if(data == seedName)
+                        isSeed = true;
+                    break;
+                case 'LABEL':
+                    label = data;
+                    break;
+                //case 'TILECOLOR':     not supported
+                //case 'TEXTCOLOR':     not supported
+                //case 'CONCENTRATION': not supported
+                case 'NORTHBIND':
+                    glueStrengths[5] = Number(data);
+                    break;
+                case 'SOUTHBIND':
+                    glueStrengths[2] = Number(data);
+                    break;
+                case 'WESTBIND':
+                    glueStrengths[3] = Number(data);
+                    break;
+                case 'EASTBIND':
+                    glueStrengths[0] = Number(data);
+                    break;
+                case 'UPBIND':
+                    glueStrengths[1] = Number(data);
+                    break;
+                case 'DOWNBIND':
+                    glueStrengths[4] = Number(data);
+                    break;
+                case 'NORTHLABEL':
+                    glueIDs[5] = data;
+                    break;
+                case 'SOUTHLABEL':
+                    glueIDs[2] = data;
+                    break;
+                case 'WESTLABEL':
+                    glueIDs[3] = data;
+                    break;
+                case 'EASTLABEL':
+                    glueIDs[0] = data;
+                    break;
+                case 'UPLABEL':
+                    glueIDs[1] = data;
+                    break;
+                case 'DOWNLABEL':
+                    glueIDs[4] = data;
+                    break;
+            }
+        }
+        
+        ts.add(new Tile(name, color, [0,0,0], glueIDs, glueStrengths, isSeed, label));
+    }
+    return ts;
+}

@@ -19,7 +19,7 @@ function Camera(target, theta, phi, range, projectionFunction, camViewMatrixLoc,
         this.isRotating = true;
         this.mouseStartX = event.clientX;
         this.mouseStartY = event.clientY;
-    };
+    }
 
     this.rotateCam = function()
     {
@@ -40,12 +40,12 @@ function Camera(target, theta, phi, range, projectionFunction, camViewMatrixLoc,
             }
             this.updateCam();
         }
-    };
+    }
 
     this.stopRotatingCam = function()
     {
         this.isRotating = false;
-    };
+    }
     
     this.translateCam = function()
     {
@@ -70,13 +70,13 @@ function Camera(target, theta, phi, range, projectionFunction, camViewMatrixLoc,
         this.target[1] += upDown;
         this.target[2] += rightLeft * Math.sin(direction) + fowardsBack * Math.cos(direction);
         this.updateCam();
-    };
+    }
     
     this.setTarget = function(target)
     {
         this.target = target;
         this.updateCam();
-    };
+    }
     
     this.updateCam = function()
     {
@@ -98,11 +98,11 @@ function Camera(target, theta, phi, range, projectionFunction, camViewMatrixLoc,
         );
         gl.uniformMatrix4fv(this.camViewMatrixLoc, false, flatten(cam));
         needsRefresh = true;
-    };
+    }
     
     this.updateProjection = function()
     {
         gl.uniformMatrix4fv(this.projectionMatrixLoc, false, flatten(projectionFunction()));
         needsRefresh = true;
-    };
-};
+    }
+}

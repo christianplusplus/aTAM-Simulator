@@ -11,8 +11,8 @@ var camNumberLoc;
 var lightOnLoc;
 var lightSrcLoc;
 
-const maxSim = 10000;
-const defaultTemp = 2;
+var maxSim = 10000;
+var temp = 2;
 var currentCam;
 var cams = [];
 var sim;
@@ -61,7 +61,7 @@ window.onload = function()
     cams[0] = new Camera(
             [8,8,8],
             Math.PI/4,
-            Math.PI/4,
+            Math.PI/3.3333333333333,
             30,
             function(){return perspective(45, canvas.width/canvas.height/2, .01, Number.MAX_VALUE);},
             camViewMatrixLoc0,
@@ -90,7 +90,7 @@ window.onload = function()
     
     //Demo
     var ts = new TileSet();
-    var N = 3; //16 for fast draw
+    var N = 10;
     ts.add(new Tile("Seed", brown, [0,0,0], [0,0,0,0,0,0], [2,2,2,0,0,0], true));
     for(var i = 0; i < N - 1; i++)
     {
@@ -103,7 +103,7 @@ window.onload = function()
     ts.add(new Tile("Filler", green, [0,0,0], [N,"yz","yz",0,"yz","yz"], [1,1,1,0,1,1], false));
     ts.add(new Tile("Filler3D", blue, [0,0,0], [N,N,N,N,N,N], [1,1,1,1,1,1], false));
     
-    sim = new aTAMSim(ts, defaultTemp, maxSim);
+    sim = new aTAMSim(ts, temp, maxSim);
     
     cursor = new Cursor();
     cursor.initBuffers();
@@ -111,7 +111,7 @@ window.onload = function()
     makeEvents();
     
     render();
-};
+}
 
 function render()
 {
@@ -126,7 +126,7 @@ function render()
         refresh();
     
     requestAnimFrame(render);
-};
+}
 
 function refresh()
 {
@@ -154,7 +154,7 @@ function refresh()
     }
     
     sim.tileSet.draw();
-};
+}
 
 function makeEvents()
 {
@@ -165,24 +165,24 @@ function makeEvents()
             cams[0].startRotatingCam();
         else
             cams[1].startRotatingCam();
-    };
+    }
     canvas.onmouseup = function(){
         cams.forEach(function(cam){
             cam.stopRotatingCam();
         });
-    };
+    }
     canvas.onmouseleave = function(){
         cams.forEach(function(cam){
             cam.stopRotatingCam();
         });
-    };
+    }
     canvas.onmousemove = function(){
         cams.forEach(function(cam){
             cam.rotateCam();
         });
-    };
-    window.onresize = function(){resizeWindow();};
-};
+    }
+    window.onresize = function(){resizeWindow();}
+}
 
 //found this hashing function on stack overflow
 String.prototype.hashCode = function(){
@@ -194,4 +194,4 @@ String.prototype.hashCode = function(){
     hash |= 0; // Convert to 32bit integer
   }
   return hash;
-};
+}

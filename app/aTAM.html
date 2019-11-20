@@ -2,6 +2,35 @@
 <html>
 <head>
 <style>
+/* Tooltip container */
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 100px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+ 
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 1;
+  bottom: 60px;
+  left: 50%;
+  margin-left: -50px;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+
 .key
 {
     border: 2px solid black;
@@ -24,6 +53,7 @@
     height: 25px;
     width: 25px;
 }
+
 body
 {
     position: fixed; 
@@ -244,45 +274,46 @@ Oops ... your browser doesn't support the HTML5 canvas element
                 <td colspan='5'><input type='range' class='slider' id='slider' min='-4' max='5' value='0' step='1' oninput='setSimSpeed(this.value)' onkeydown='event.preventDefault()' src='../icons/speed.png'/></td>
             </tr>
             <tr>
-                <td><input class='buttonOr' type='image' src='../icons/restart.png' onclick='restart();'/></td>
-                <td><input class='buttonOr' id='pauseButton' type='image' src='../icons/pause.png' onclick='pause();'/></td>
-                <td><input class='buttonOr' id='stepButton' type='image' src='../icons/step.png'/ onclick='sim.simulate();'></td>
-                <td><input class='buttonOr' id='playButton' type='image' src='../icons/play.png' onclick='play();'/></td>
-                <td><input class='buttonOr' id='endButton' type='image' src='../icons/end.png' onclick='end();'/></td>
+                <td class='tooltip'><input class='buttonOr' type='image' src='../icons/restart.png' onclick='restart();'/><span class='tooltiptext'>Restart</span></td>
+                <td class='tooltip'><input class='buttonOr' id='pauseButton' type='image' src='../icons/pause.png' onclick='pause();'/><span class='tooltiptext'>Pause</span></td>
+                <td class='tooltip'><input class='buttonOr' id='stepButton' type='image' src='../icons/step.png'/ onclick='sim.simulate();'><span class='tooltiptext'>Step</span></td>
+                <td class='tooltip'><input class='buttonOr' id='playButton' type='image' src='../icons/play.png' onclick='play();'/><span class='tooltiptext'>Play</span></td>
+                <td class='tooltip'><input class='buttonOr' id='endButton' type='image' src='../icons/end.png' onclick='end();'/><span class='tooltiptext'>End</span></td>
             </tr>
             <tr>
-                <td><input class='buttonGr' type='image' src='../icons/cube.png' onclick='toggleDetail();'/></td>
-                <td><input class='buttonGr' type='image' src='../icons/cursor.png' onclick='toggleCursor();'/></td>
-                <td><input class='buttonGr' type='image' src='../icons/origin.png' onclick='goToOrigin();'/></td>
-                <td><input class='buttonPr' type='image' src='../icons/upload.png'/></td>
-                <td><input class='buttonPr' type='image' src='../icons/download.png' onclick='downloadTDS();'/></td>
+                <td class='tooltip'><input class='buttonGr' type='image' src='../icons/cube.png' onclick='toggleDetail();'/><span class='tooltiptext'>Toggle Models</span></td>
+                <td class='tooltip'><input class='buttonGr' type='image' src='../icons/cursor.png' onclick='toggleCursor();'/><span class='tooltiptext'>Toggle Cursor</span></td>
+                <td class='tooltip'><input class='buttonGr' type='image' src='../icons/origin.png' onclick='goToOrigin();'/><span class='tooltiptext'>Go To Origin</span></td>
+                <td class='tooltip'><input class='buttonPr' type='image' src='../icons/upload.png'/ onclick='document.getElementById("hiddenFileElement").click();';><span class='tooltiptext'>Upload Tile Set</span></td>
+                <input type="file" id="hiddenFileElement" accept='.tds,.sts' style='display:none' onchange='upload(this.files[0]);'/>
+                <td class='tooltip'><input class='buttonPr' type='image' src='../icons/download.png' onclick='requestDownload();'/><span class='tooltiptext'>Download Tile Set</span></td>
             </tr>
         </table>
     </td>
     <td>
         <table cellspacing='0' cellpadding='0' style='margin-left:50px;'>
             <tr>
-                <td><input class='buttonYe' type='image' src='../icons/open.png' onclick='openTile();'/></td>
+                <td class='tooltip'><input class='buttonYe' type='image' src='../icons/open.png' onclick='openTile();'/><span class='tooltiptext'>Open Tile</span></td>
                 <td><b style='margin-left:20px; float:right;'>NAME:</b></td>
                 <td><input type='text' id='text0' disabled/></td>
             </tr>
             <tr>
-                <td><input class='buttonYe' type='image' src='../icons/new.png' onclick='newTile();'/></td>
+                <td class='tooltip'><input class='buttonYe' type='image' src='../icons/new.png' onclick='newTile();'/><span class='tooltiptext'>New Tile</span></td>
                 <td><b style='margin-left:20px; float:right;'>COLOR:</b></td>
                 <td><input type='text' id='text1' disabled/></td>
             </tr>
             <tr>
-                <td><input class='buttonYe' id='closeButton' type='image' src='../icons/close.png' onclick='closeTile();' disabled/></td>
+                <td class='tooltip'><input class='buttonYe' id='closeButton' type='image' src='../icons/close.png' onclick='closeTile();' disabled/><span class='tooltiptext'>Save Tile</span></td>
                 <td><b style='margin-left:20px; float:right;'>GLUE IDS:</b></td>
                 <td><input type='text' id='text2' disabled/></td>
             </tr>
             <tr>
-                <td><input class='buttonYe' id='discardButton' type='image' src='../icons/cancel.png' onclick='discardTile();' disabled/></td>
+                <td class='tooltip'><input class='buttonYe' id='discardButton' type='image' src='../icons/cancel.png' onclick='discardTile();' disabled/><span class='tooltiptext'>Discard Tile</span></td>
                 <td><b style='margin-left:20px; float:right;'>STRENGTHS:</b></td>
                 <td><input type='text' id='text3' disabled/></td>
             </tr>
             <tr>
-                <td><input class='buttonYe' id='destroyButton' type='image' src='../icons/delete.png' onclick='deleteTile();' disabled/></td>
+                <td class='tooltip'><input class='buttonYe' id='destroyButton' type='image' src='../icons/delete.png' onclick='deleteTile();' disabled/><span class='tooltiptext'>Destroy Tile</span></td>
                 <td><b style='margin-left:20px; float:right;'>SEED:</b></td>
                 <td><input type='text' id='text4' disabled/></td>
             </tr>

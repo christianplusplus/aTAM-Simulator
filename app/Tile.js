@@ -47,7 +47,7 @@ function Tile(tileName, tileColor, position, glueIDs, glueStrengths, isSeed, lab
         this.glueIDs = this.glueIDs.map(function(g){return String(g);});
         for(var i = 0; i < this.glueIDs.length; i++)
             this.colors[i] = this.colorHash(this.glueIDs[i]);
-    };
+    }
     
     this.initBuffers = function()
     {
@@ -59,7 +59,7 @@ function Tile(tileName, tileColor, position, glueIDs, glueStrengths, isSeed, lab
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(flatten(vertices)), gl.STATIC_DRAW);
         tileVertexAttribute = gl.getAttribLocation(program, "vPosition");
         gl.enableVertexAttribArray(tileVertexAttribute);//might be bad to put this here.
-    };
+    }
     
     this.draw = function()
     {
@@ -118,7 +118,7 @@ function Tile(tileName, tileColor, position, glueIDs, glueStrengths, isSeed, lab
         gl.uniform3fv(tileColorLoc, lineColor);
         gl.drawArrays(gl.LINE_STRIP, viewingAngleOffset + 0, 8);
         gl.drawArrays(gl.LINE_STRIP, viewingAngleOffset + 50, 3);
-    };
+    }
     
     this.fastDraw = function()
     {
@@ -145,7 +145,7 @@ function Tile(tileName, tileColor, position, glueIDs, glueStrengths, isSeed, lab
         gl.uniform3fv(tileColorLoc, lineColor);
         gl.drawArrays(gl.LINE_STRIP, viewingAngleOffset + 424, 8);
         gl.drawArrays(gl.LINE_STRIP, viewingAngleOffset + 432, 3);
-    };
+    }
     
     this.buildModel = function()
     {
@@ -300,7 +300,7 @@ function Tile(tileName, tileColor, position, glueIDs, glueStrengths, isSeed, lab
             vertices.push(mult(rotateZ(180), mult(rotateY(90), vec4(vertices[i]))).slice(0, 3));
         
         return vertices;
-    };
+    }
     
     //Takes a number and outputs a vec3 with psuedo random number elements in the range [0,1)
     this.colorHash = function(seed)
@@ -315,7 +315,7 @@ function Tile(tileName, tileColor, position, glueIDs, glueStrengths, isSeed, lab
         var b = Math.sin((seed+sqrt2)*53) * 49157;
         b -= Math.floor(b);
         return [r,g,b];
-    };
+    }
     
     //takes and string like "-5,0,20" and creates copied tile at coordinates [-5,0,20]
     this.copyAt = function(keyString)
@@ -325,16 +325,16 @@ function Tile(tileName, tileColor, position, glueIDs, glueStrengths, isSeed, lab
         var tile = new Tile(this.tileName, this.tileColor, coords, this.glueIDs, this.glueStrengths, this.isSeed, this.label);
         tile.init();
         return tile;
-    };
+    }
     
     this.colorToString = function()
     {
         return this.tileColor.map(function(color){return Math.round(color * 255);}).join();
-    };
+    }
     
     this.updatePosition = function(position)
     {
         this.position = position;
         this.modelViewMatrix = mat4(1,0,0,position[0],0,1,0,position[1],0,0,1,position[2],0,0,0,1);
-    };
-};
+    }
+}
