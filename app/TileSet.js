@@ -1,4 +1,4 @@
-const rowSize = 5;
+var rowSize = 5;
 const camDiligence = 6;
 const glueOrder = ['EAST', 'UP', 'SOUTH', 'WEST', 'DOWN', 'NORTH'];
 
@@ -79,6 +79,28 @@ function TileSet()
     {
         for(var i = 0; i < this.list.length; i++)
             this.list[i].updatePosition(this.pointerToPosString(i).split(',').map(Number));
+    }
+    
+    this.decRowSize = function()
+    {
+        if(rowSize > 1)
+        {
+            rowSize--;
+            this.crunch();
+            needsRefresh = true;
+            this.adjustCam();
+        }
+    }
+    
+    this.incRowSize = function()
+    {
+        if(rowSize < this.list.length)
+        {
+            rowSize++
+            this.crunch();
+            needsRefresh = true;
+            this.adjustCam();
+        }
     }
     
     this.draw = function()

@@ -70,7 +70,7 @@ window.onkeyup = function(e)
 
 window.onwheel = function(e)
 {
-    var camNumber = event.clientX < canvas.width / 2 ? 0 : 1;
+    var camNumber = event.clientX < canvas.width * split ? 0 : 1;
     if(e.deltaY > 0)
         cams[camNumber].range *= zoomSpeed;
     else
@@ -163,10 +163,43 @@ function goToOrigin()
     cams[0].setTarget([0,0,0]);
 }
 
+function setMaxSim()
+{
+    var newMax = prompt(`Set the maximum number of simulated tiles.\nThe current maximum is ${sim.maxSize}.`, sim.maxSize);
+    if(newMax == null)
+        return;
+    requireRestart();
+    sim.maxSize = Number(newMax);
+}
+
+function setTemp()
+{
+    var newTemp = prompt(`Set the simulation temperature.\nThe current temperature is ${sim.temperature}.`, sim.temperature);
+    if(newTemp == null)
+        return;
+    requireRestart();
+    sim.temperature = Number(newTemp);
+}
+
+function toggleView()
+{
+    if(split < .25)
+        setScreenSplit(.5);
+    else if(split > .75)
+        setScreenSplit(.0);
+    else
+        setScreenSplit(1.);
+}
+
+function setScreenSplit(ratio)
+{
+    split = ratio;
+    resizeWindow();
+}
+
 var isNewTile = false;
 var isInspectingTile = false;
 var inspectedTile;
-
 
 function openTile()
 {
@@ -478,9 +511,9 @@ function makeTileSetWithTDS(contents)
                 case 'LABEL':
                     label = data;
                     break;
-                //case 'TILECOLOR':     not supported
-                //case 'TEXTCOLOR':     not supported
-                //case 'CONCENTRATION': not supported
+                //case 'TILECOLOR':       not supported
+                //case 'TEXTCOLOR':       not supported
+                //case 'CONCENTRATION':   not supported
                 case 'NORTHBIND':
                     glueStrengths[5] = Number(data);
                     break;

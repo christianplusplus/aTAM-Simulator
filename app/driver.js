@@ -11,8 +11,9 @@ var camNumberLoc;
 var lightOnLoc;
 var lightSrcLoc;
 
-var maxSim = 10000;
-var temp = 2;
+const maxSim = 10000;
+const temp = 2;
+var split = .5;
 var currentCam;
 var cams = [];
 var sim;
@@ -63,7 +64,7 @@ window.onload = function()
             Math.PI/4,
             Math.PI/3.3333333333333,
             30,
-            function(){return perspective(45, canvas.width/canvas.height/2, .01, Number.MAX_VALUE);},
+            function(){return perspective(45, canvas.width/canvas.height*split, .01, Number.MAX_VALUE);},
             camViewMatrixLoc0,
             projectionMatrixLoc0
     );
@@ -72,7 +73,7 @@ window.onload = function()
             0,
             Math.PI/2,
             12,
-            function(){return perspective(45, canvas.width/canvas.height/2, .01, Number.MAX_VALUE);},
+            function(){return perspective(45, canvas.width/canvas.height*(1-split), .01, Number.MAX_VALUE);},
             camViewMatrixLoc1,
             projectionMatrixLoc1
     );
@@ -116,8 +117,12 @@ window.onload = function()
 function render()
 {
     frameCounter += simSpeed;
-    while(frameCounter >= 1. && sim.simulate())
+    while(frameCounter >= 1.)
+    {
         frameCounter -= 1.;
+        if(!sim.simulate())
+            pause();
+    }
     
     if(fowards || left || backwards || right || up || down)
         cams[0].translateCam();
@@ -134,7 +139,7 @@ function refresh()
     
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     
-    gl.viewport(0, 0, canvas.width/2, canvas.height);
+    gl.viewport(0, 0, canvas.width*split, canvas.height);
     changeCam(0);
     gl.uniform1i(lightOnLoc, false);
     
@@ -145,7 +150,7 @@ function refresh()
     if(showCursor)
         cursor.draw();
     
-    gl.viewport(canvas.width/2, 0, canvas.width/2, canvas.height);
+    gl.viewport(canvas.width*split, 0, canvas.width*(1-split), canvas.height);
     changeCam(1);
     if(sim.tileSet.list.length > 0)
     {
@@ -161,7 +166,7 @@ function makeEvents()
     for(var i = 0; i < 5; i++)
         textBoxes.push(document.getElementById('text' + i));
     canvas.onmousedown = function(){
-        if(event.clientX < canvas.width / 2)
+        if(event.clientX < canvas.width * split)
             cams[0].startRotatingCam();
         else
             cams[1].startRotatingCam();
