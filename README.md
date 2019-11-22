@@ -98,7 +98,7 @@ false
 
 The first line is the tile name, which is not required to be unique.
 The second line is the label. This is only for ISU TAS and does not have a special purpose in this simulator.
-Next is the tile color, which is formatted as a RGB color ratio. i.e. 1,1,1 is white and 0,0,0 is black.
+Next is the tile color, which is formatted as an RGB color ratio. i.e. 1,1,1 is white and 0,0,0 is black.
 Next is the glue labels, which is a comma separated list with six strings. Null strings are valid input.
 Next is the glue strings. This is comprised of six comma separated unsigned integer values. 0 indicates that the glue is unused.
 Last is the seed Boolean. There can only be one seed.  If multiple seeds are indicated, then only the last one is set to be the seed.
