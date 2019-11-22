@@ -85,10 +85,15 @@ is delimited by a double-dash (--) on its own line.  Each tile then has at least
 lines between the double-dash and the first attribute, but you can have empty lines after the attributes. This is an example tile:
 
 Scaffold
+
 S
+
 1,1,1
+
 1,xy,xz,0,0,0
+
 2,1,1,2,0,0
+
 false
 
 The first line is the tile name, which is not required to be unique.
