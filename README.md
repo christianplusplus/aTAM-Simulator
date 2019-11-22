@@ -1,6 +1,6 @@
 ### aTAM-Simulator
 
-#What is aTAM?
+What is aTAM?
 ----------------------------------------------------------------------------------------------------------------------------------------
 The abstract Tile Assembly Model is mathematical model that relates to the processes of self-assembly; so things like chemical reactions,
 molecular constructions, and, most apply, DNA tiling.  Given a tile set, seed assembly, and temperature, the model builds an assembly
@@ -13,7 +13,7 @@ http://self-assembly.net/wiki/index.php?title=Abstract_Tile_Assembly_Model_(aTAM
 Simulation Controls
 ----------------------------------------------------------------------------------------------------------------------------------------
 All you need to do to simulate an assembly is to hit the PLAY button. This applies one tile at a time, defaulting to one tile per frame.
-The SPEED of the simulation can be controlled by the fast foward bar.
+The SPEED of the simulation can be controlled by the fast forward bar.
 
 You can also PAUSE and RESET the simulation.
 
@@ -70,16 +70,32 @@ Tile Set Files
 ----------------------------------------------------------------------------------------------------------------------------------------
 Users can UPLOAD and DOWNLOAD tile set files, which makes sharing them easy.
 
-This simulator is compatable with the ISU TAS file system. When you want these types of files, in the file request box, simply
-list ".tds" and ".tdp". "tds" is tile set itself. The simulators are not fully compatable. As such, the TILECOLOR, TEXTCOLOR, and
+This simulator is compatible with the ISU TAS file system. When you want these types of files, in the file request box, simply
+list ".tds" and ".tdp". "tds" is tile set itself. The simulators are not fully compatible. As such, the TILECOLOR, TEXTCOLOR, and
 CONCENTRATION attributes will always be left blank. If you upload a tile set with LABELS, the labels will be remembered for when you
 want to download a modified version of tile set but cannot be changed in the simulator. "tdp" is for seed assemblies. This simulator
-does not utilize a seed assembly but rather just marks a single tile as the seed tile. Downloading a "tdp" file simply creates
-a seed assembly with only the designated seed tile in it.  Uploading from the TAS file system requires that you only choose a "tds" file.
-You are then prompted to indicate which tile is the seed tile. You can actually indicate the seed tile after the tile set is loaded
-first, but the simulation won't run until you do this. You can visit the ISU TAS wiki page if you want to learn more about it:
+does not utilize a seed assembly but rather just marks a single tile as the seed tile. Downloading a "tdp" file simply creates 
+a seed assembly with only the designated seed tile in it.  Uploading from the TAS file system requires that you only choose a "tds"
+file. You are then prompted to indicate which tile is the seed tile. You can actually indicate the seed tile after the tile set is
+loaded first, but the simulation won't run until you do this. You can visit the ISU TAS wiki page if you want to learn more about it:
 http://self-assembly.net/wiki/index.php?title=ISU_TAS
 
-This simulator also has its own file format: ".sts".  "sts" stands for simulator tile set.
+This simulator also has its own file format: ".sts".  "sts" stands for simulator tile set and is text based. Each tile in an "sts" file
+is delimited by a double-dash (--) on its own line.  Each tile then has at least six lines for its attributes. You cannot have empty
+lines between the double-dash and the first attribute, but you can have empty lines after the attributes. This is an example tile:
+
+Scaffold
+S
+1,1,1
+1,xy,xz,0,0,0
+2,1,1,2,0,0
+false
+
+The first line is the tile name, which is not required to be unique.
+The second line is the label. This is only for ISU TAS and does not have a special purpose in this simulator.
+Next is the tile color, which is formatted as a RGB color ratio. i.e. 1,1,1 is white and 0,0,0 is black.
+Next is the glue labels, which is a comma separated list with six strings. Null strings are valid input.
+Next is the glue strings. This is comprised of six comma separated unsigned integer values. 0 indicates that the glue is unused.
+Last is the seed Boolean. There can only be one seed.  If multiple seeds are indicated, then only the last one is set to be the seed.
 
 ----------------------------------------------------------------------------------------------------------------------------------------
