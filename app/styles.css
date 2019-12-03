@@ -83,6 +83,7 @@ table
     animation: .5s shiny;
     animation-iteration-count: infinite;
     animation-direction: alternate;
+    animation-delay: 1s;
     margin: 5px;
     width: 30px;
     border-radius: 3px;
@@ -98,11 +99,11 @@ table
 }
 @keyframes shiny
 {
-    to
+    from
     {
         background-color: DarkOrange;
     }
-    from
+    to
     {
         background-color: Gold;
     }
