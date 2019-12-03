@@ -80,7 +80,7 @@ table
 .playButton
 {
     background-color: DarkOrange;
-    animation: .5s shiny;
+    animation: .25s shiny;
     animation-iteration-count: infinite;
     animation-direction: alternate;
     animation-delay: 1s;
