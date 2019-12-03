@@ -1,191 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<style>
-/* Tooltip container */
-.tooltip {
-  position: relative;
-  display: inline-block;
-}
-
-/* Tooltip text */
-.tooltip .tooltiptext {
-  visibility: hidden;
-  width: 100px;
-  background-color: black;
-  color: #fff;
-  text-align: center;
-  padding: 5px 0;
-  border-radius: 6px;
- 
-  /* Position the tooltip text - see examples below! */
-  position: absolute;
-  z-index: 1;
-  bottom: 60px;
-  left: 50%;
-  margin-left: -50px;
-}
-
-/* Show the tooltip text when you mouse over the tooltip container */
-.tooltip:hover .tooltiptext {
-  visibility: visible;
-}
-
-.key
-{
-    border: 2px solid black;
-    height: 25px;
-    width: 25px;
-    text-align: center;
-    background-color: gainsboro;
-    font-weight: bold;
-}
-.spaceKey
-{
-    border: 2px solid black;
-    height: 25px;
-    width: 90px;
-    text-align: center;
-}
-.keyEmpty
-{
-    border: 2px solid white;
-    height: 25px;
-    width: 25px;
-}
-
-body
-{
-    position: fixed; 
-    overflow:hidden;
-    width: 100%;
-}
-table
-{
-    margin:0;
-    padding:0;
-}
-.buttonOr
-{
-    background-color: DarkOrange;
-    margin: 5px;
-    width: 30px;
-    border-radius: 3px;
-    cursor: pointer;
-}
-.buttonOr:hover
-{
-    background-color: OrangeRed;
-}
-.buttonOr:disabled
-{
-    background-color: Grey;
-}
-.buttonYe
-{
-    background-color: Yellow;
-    margin: 0px;
-    width: 20px;
-    border-radius: 3px;
-    cursor: pointer;
-}
-.buttonYe:hover
-{
-    background-color: Gold;
-}
-.buttonYe:disabled
-{
-    background-color: Grey;
-}
-.buttonGr
-{
-    background-color: Lime;
-    margin: 5px;
-    width: 30px;
-    border-radius: 3px;
-    cursor: pointer;
-}
-.buttonGr:hover
-{
-    background-color: LightSeaGreen;
-}
-.buttonBl
-{
-    background-color: DodgerBlue;
-    margin: 5px;
-    width: 30px;
-    border-radius: 3px;
-    cursor: pointer;
-}
-.buttonBl:hover
-{
-    background-color: SteelBlue;
-}
-.buttonRe
-{
-    background-color: Crimson;
-    margin: 5px;
-    width: 30px;
-    border-radius: 3px;
-    cursor: pointer;
-}
-.buttonRe:hover
-{
-    background-color: Maroon;
-}
-.buttonWh
-{
-    background-color: AntiqueWhite;
-    margin: 5px;
-    width: 30px;
-    border-radius: 3px;
-    cursor: pointer;
-}
-.buttonWh:hover
-{
-    background-color: PeachPuff;
-}
-.buttonPr
-{
-    background-color: BlueViolet;
-    margin: 5px;
-    width: 30px;
-    border-radius: 3px;
-    cursor: pointer;
-}
-.buttonPr:hover
-{
-    background-color: DarkViolet;
-}
-.slider
-{
-    -webkit-appearance: none;
-    width: 100%;
-    height: 25px;
-    background: FireBrick;
-    outline: none;
-    opacity: 0.7;
-    -webkit-transition: .2s;
-    transition: opacity .2s;
-}
-
-.slider:hover
-{
-    opacity: 1;
-}
-    .slider::-webkit-slider-thumb
-{
-    -webkit-appearance: none;
-    appearance: none;
-    width: 25px;
-    height: 25px;
-    background: DarkOrange;
-    background-image: url('../icons/speed.png');
-    background-size: cover;
-    cursor: pointer;
-}
-</style>
-
+<link rel='stylesheet' href='styles.css'>
 <script id='vertex-shader' type='x-shader/x-vertex'>
 precision highp float;
 precision highp int;
@@ -240,6 +56,7 @@ void main()
 <script type='text/javascript' src='../Common/initShaders.js'></script>
 <script type='text/javascript' src='../Common/MV.js'></script>
 <script type='text/javascript' src='../Common/webgl-debug.js'></script>
+
 <script type='text/javascript' src='driver.js'></script>
 <script type='text/javascript' src='controls.js'></script>
 <script type='text/javascript' src='Camera.js'></script>
@@ -317,7 +134,7 @@ Oops ... your browser doesn't support the HTML5 canvas element
                 <td class='tooltip'><input class='buttonOr' type='image' src='../icons/restart.png' onclick='restart();'/><span class='tooltiptext'>Restart</span></td>
                 <td class='tooltip'><input class='buttonOr' id='pauseButton' type='image' src='../icons/pause.png' onclick='pause();'/><span class='tooltiptext'>Pause</span></td>
                 <td class='tooltip'><input class='buttonOr' id='stepButton' type='image' src='../icons/step.png'/ onclick='sim.simulate();'><span class='tooltiptext'>Step</span></td>
-                <td class='tooltip'><input class='buttonOr' id='playButton' type='image' src='../icons/play.png' onclick='play();'/><span class='tooltiptext'>Play</span></td>
+                <td class='tooltip'><input class='playButton' id='playButton' type='image' src='../icons/play.png' onclick='play();' onmouseover='this.style.animation = "none";'/><span class='tooltiptext'>Play</span></td>
                 <td class='tooltip'><input class='buttonOr' id='endButton' type='image' src='../icons/end.png' onclick='end();'/><span class='tooltiptext'>End</span></td>
                 <td class='tooltip'><input class='buttonRe' type='image' src='../icons/stackUp.png' onclick='sim.tileSet.decRowSize();'/><span class='tooltiptext'>Make Tile Set Taller</span></td>
                 <td class='tooltip'><input class='buttonRe' type='image' src='../icons/stackRight.png' onclick='sim.tileSet.incRowSize();'/><span class='tooltiptext'>Make Tile Set Wider</span></td>
@@ -365,6 +182,5 @@ Oops ... your browser doesn't support the HTML5 canvas element
     </td>
 </tr>
 </table>
-
 </body>
 </html>
