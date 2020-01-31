@@ -462,6 +462,7 @@ function upload(file)
         sim.restart();
         needsRefresh = true;
         discardTile();
+        goToOrigin();
     };
     reader.readAsText(file);
 }
@@ -575,4 +576,5 @@ function demo()
     sim.restart();
     needsRefresh = true;
     discardTile();
+    goToOrigin();
 }

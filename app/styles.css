@@ -105,7 +105,7 @@ table
     }
     to
     {
-        background-color: Gold;
+        background-color: Cyan;
     }
 }
 .demoButton
@@ -122,7 +122,7 @@ table
 }
 .demoButton:hover
 {
-    background-color: OrangeRed;
+    background-color: DarkViolet;
 }
 .demoButton:disabled
 {
@@ -136,7 +136,7 @@ table
     }
     to
     {
-        background-color: DarkViolet;
+        background-color: cyan;
     }
 }
 .buttonYe
