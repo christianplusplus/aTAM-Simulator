@@ -357,6 +357,8 @@ function requestDownload()
 {
     //prompt and test file types
     var query = prompt('Please list the file extensions/types you want.\n.sts, .tdp, and .tds are supported.\nExample: ".tds .tdp"\nSee README for file format descriptions.', lastRequest);
+    if(query == null)
+        return;
     var fileRegExp = new RegExp('(\\s*(\\.sts|\\.tdp|\\.tds))+\\s*');
     if(!fileRegExp.test(query))
     {
@@ -561,16 +563,18 @@ function makeTileSetWithTDS(contents)
 
 function demo()
 {
-    var query = prompt('Enter a demo ID:\n[0, 1, 2, 3]', '0');
-    var fileRegExp = new RegExp('[0123]');
+    var names = Object.keys(demos);
+    var query = prompt('Enter a demo ID:\n' + names.join(', '), '');
+    if(query == null)
+        return;
+    var fileRegExp = new RegExp(names.join('|'));
     if(!fileRegExp.test(query))
     {
-        alert('Expected a number from the list.');
+        alert('Expected a demo from the list.');
         return;
     }
-    var contents = demos[Number(query)];
-    var tileSet;
-    tileSet = makeTileSetWithSTS(contents);
+    var contents = demos[query];
+    var tileSet = makeTileSetWithSTS(contents);
     pause();
     sim.tileSet = tileSet;
     sim.restart();

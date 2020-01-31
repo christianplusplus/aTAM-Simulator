@@ -448,5 +448,10 @@ INT
 1,0.8,0.6
 H,,V,H,,V
 1,0,1,1,0,1
-false`
-var demos = [demo0, demo1, demo2, demo3];
+false`;
+var demos = {
+    'cube': demo0,
+    'grow2D': demo3,
+    'grow3D': demo1,
+    'counter': demo2
+};
