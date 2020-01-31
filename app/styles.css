@@ -108,6 +108,37 @@ table
         background-color: Gold;
     }
 }
+.demoButton
+{
+    background-color: BlueViolet;
+    animation: .25s shinyD;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    animation-delay: 1s;
+    margin: 5px;
+    width: 30px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+.demoButton:hover
+{
+    background-color: OrangeRed;
+}
+.demoButton:disabled
+{
+    background-color: Grey;
+}
+@keyframes shinyD
+{
+    from
+    {
+        background-color: BlueViolet;
+    }
+    to
+    {
+        background-color: DarkViolet;
+    }
+}
 .buttonYe
 {
     background-color: Yellow;

@@ -557,3 +557,22 @@ function makeTileSetWithTDS(contents)
     }
     return ts;
 }
+
+function demo()
+{
+    var query = prompt('Enter a demo ID:\n[0, 1, 2, 3]', '0');
+    var fileRegExp = new RegExp('[0123]');
+    if(!fileRegExp.test(query))
+    {
+        alert('Expected a number from the list.');
+        return;
+    }
+    var contents = demos[Number(query)];
+    var tileSet;
+    tileSet = makeTileSetWithSTS(contents);
+    pause();
+    sim.tileSet = tileSet;
+    sim.restart();
+    needsRefresh = true;
+    discardTile();
+}

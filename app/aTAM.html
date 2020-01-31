@@ -65,6 +65,7 @@ void main()
 <script type='text/javascript' src='aTAMSim.js'></script>
 <script type='text/javascript' src='TileSet.js'></script>
 <script type='text/javascript' src='download.js'></script>
+<script type='text/javascript' src='demos.js'></script>
 </head>
 <body>
 <canvas id='gl-canvas' 
@@ -119,10 +120,6 @@ Oops ... your browser doesn't support the HTML5 canvas element
                 <td><img src='../icons/next.png' width='15'/></td>
                 <td><img src='../icons/scroll.png' width='30'/></td>
             </tr>
-            <tr>
-            <td/><td/><td/><td/>
-            <td class='tooltip'><input class='buttonWh' type='image' src='../icons/screenShare.png' onclick='toggleView();'/><span class='tooltiptext'>Toggle View</span>
-            </tr>
         </table>
     </td>
     <td>
@@ -138,6 +135,7 @@ Oops ... your browser doesn't support the HTML5 canvas element
                 <td class='tooltip'><input class='buttonOr' id='endButton' type='image' src='../icons/end.png' onclick='end();'/><span class='tooltiptext'>End</span></td>
                 <td class='tooltip'><input class='buttonRe' type='image' src='../icons/stackUp.png' onclick='sim.tileSet.decRowSize();'/><span class='tooltiptext'>Make Tile Set Taller</span></td>
                 <td class='tooltip'><input class='buttonRe' type='image' src='../icons/stackRight.png' onclick='sim.tileSet.incRowSize();'/><span class='tooltiptext'>Make Tile Set Wider</span></td>
+                <td class='tooltip'><input class='buttonRe' type='image' src='../icons/screenShare.png' onclick='toggleView();'/><span class='tooltiptext'>Toggle View</span>
             </tr>
             <tr>
                 <td class='tooltip'><input class='buttonGr' type='image' src='../icons/cube.png' onclick='toggleDetail();'/><span class='tooltiptext'>Toggle Models</span></td>
@@ -145,9 +143,10 @@ Oops ... your browser doesn't support the HTML5 canvas element
                 <td class='tooltip'><input class='buttonGr' type='image' src='../icons/origin.png' onclick='goToOrigin();'/><span class='tooltiptext'>Go To Origin</span></td>
                 <td class='tooltip'><input class='buttonBl' type='image' src='../icons/simSize.png' onclick='setMaxSim();'/><span class='tooltiptext'>Set Simulation Limit</span></td>
                 <td class='tooltip'><input class='buttonBl' type='image' src='../icons/temp.png' onclick='setTemp();'/><span class='tooltiptext'>Set Temperature</span></td>
-                <td class='tooltip'><input class='buttonPr' type='image' src='../icons/upload.png'/ onclick='document.getElementById("hiddenFileElement").click();';><span class='tooltiptext'>Upload Tile Set</span></td>
+                <td class='tooltip'><input class='buttonPr' type='image' src='../icons/upload.png' onclick='document.getElementById("hiddenFileElement").click();';><span class='tooltiptext'>Upload Tile Set</span></td>
                 <input type="file" id="hiddenFileElement" accept='.tds,.sts' style='display:none' onchange='upload(this.files[0]);'/>
                 <td class='tooltip'><input class='buttonPr' type='image' src='../icons/download.png' onclick='requestDownload();'/><span class='tooltiptext'>Download Tile Set</span></td>
+                <td class='tooltip'><input class='demoButton' type='image' src='../icons/demo.png' onclick='demo();' onmouseover='this.style.animation = "none";/><span class='tooltiptext'>Load Demo</span></td>
             </tr>
         </table>
     </td>
