@@ -564,17 +564,20 @@ function makeTileSetWithTDS(contents)
 function demo()
 {
     var names = Object.keys(demos);
-    var query = prompt('Enter a demo ID:\n' + names.join(', '), '');
+    var query = prompt('Enter a demo ID:\n' + names.join(', ') + ', thin [N] [d]', '');
     if(query == null)
         return;
-    var fileRegExp = new RegExp(names.join('|'));
+    var fileRegExp = new RegExp(names.join('|')+'|thin\\s\\d*\\s\\d*');
     if(!fileRegExp.test(query))
     {
         alert('Expected a demo from the list.');
         return;
     }
-    var contents = demos[query];
-    var tileSet = makeTileSetWithSTS(contents);
+    var tileSet;
+    if(query.split(' ')[0] == 'thin')
+        tileSet = makeThin(query.split(' ')[1], query.split(' ')[2]);
+    else
+        tileSet = makeTileSetWithSTS(demos[query]);
     pause();
     sim.tileSet = tileSet;
     sim.restart();
