@@ -93,7 +93,6 @@ function aTAMSim(tileSet, temperature, maxSize)
             if(tile.glueStrengths[face] > 0 && !this.assembly.has(neighbors[face]) && !this.frontier.includes(neighbors[face]))
                 this.frontier.push(neighbors[face]);
         
-        console.log(tile.tileName + tile.glueIDs);
         this.size++;
         needsRefresh = true;
         return true;

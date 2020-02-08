@@ -8,6 +8,8 @@ var fillColor = [0,0,.5];
 
 function makeThin(N, k)
 {
+    N = Number(N);
+    k = Number(k);
     id = 0;
     ts = new TileSet();
     
@@ -16,7 +18,7 @@ function makeThin(N, k)
     var l = Math.ceil(Math.log(m)/Math.log(2))+1;
     var s = Math.pow(m,d)-Math.floor((N-3*l-1)/(3*l+2));
     var c = k%3;
-    var r = (N+1)%(3*l+2)
+    var r = N+1-(3*l+2)*(Math.pow(m,d)-s+1);
     
     switch(c)
     {
@@ -156,8 +158,6 @@ function makeThin(N, k)
     
     upColumn('<inc,read,'+bin(2*m-1,l)+'>','<roof,col,2>');
     upColumn('<roof,col,2>','<roof,col,3>');
-    upColumn('<roof,col,'+(l+3)+'>','<roof,col,'+(l+4)+'>');
-    upColumn('<roof,col,'+(l+4)+'>','<roof,col,'+(l+5)+'>');
     
     for(var i = 3; i <= l+2; i++)
         roofChimney('<roof,col,'+i+'>','<roof,col,'+(i+1)+'>','<roof,filler,1>');
@@ -165,12 +165,16 @@ function makeThin(N, k)
     for(var i = 1; i <= d-1; i++)
         roofFiller('<roof,filler,'+i+'>','<roof,filler,'+(i+1)+'>');
     
-    roofCap('<roof,col,'+(l+5)+'>','<roof,r_shingle,1>','<roof,l_shingle,1>');
+    roofCap('<roof,col,'+(l+r+4)+'>','<roof,r_shingle,1>','<roof,l_shingle,1>');
+    
+    for(var i = l+3; i <= l+r+3; i++)
+        upColumn('<roof,col,'+i+'>','<roof,col,'+(i+1)+'>');
     
     for(var i = 1; i <= c+2;i++)
         roofLeftShingle('<roof,l_shingle,'+i+'>','<roof,l_shingle,'+(i+1)+'>','<d_fill>');
-    for(var i = 1; i <= 3*d-3;i++)
-        roofRightShingle('<roof,r_shingle,'+i+'>','<roof,r_shingle,'+(i+1)+'>','<d_fill>');
+    if(r > 0)
+        for(var i = 1; i <= 3*d-3;i++)
+            roofRightShingle('<roof,r_shingle,'+i+'>','<roof,r_shingle,'+(i+1)+'>','<d_fill>');
         
     downColumn('<d_fill>','<d_fill>');
     
