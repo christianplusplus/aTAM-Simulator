@@ -165,13 +165,12 @@ function makeThin(N, k)
     for(var i = 1; i <= d-1; i++)
         roofFiller('<roof,filler,'+i+'>','<roof,filler,'+(i+1)+'>');
     
-    roofCap('<roof,col,'+(l+r+5)+'>','<roof,r_shingle,1>','<roof,l_shingle,1>');
+    roofCap('<roof,col,'+(l+5)+'>','<roof,r_shingle,1>','<roof,l_shingle,1>');
     
     for(var i = 1; i <= c+2;i++)
         roofLeftShingle('<roof,l_shingle,'+i+'>','<roof,l_shingle,'+(i+1)+'>','<d_fill>');
-    if(r + 1 > 0)
-        for(var i = 1; i <= 3*d-3;i++)
-            roofRightShingle('<roof,r_shingle,'+i+'>','<roof,r_shingle,'+(i+1)+'>','<d_fill>');
+    for(var i = 1; i <= 3*d-3;i++)
+        roofRightShingle('<roof,r_shingle,'+i+'>','<roof,r_shingle,'+(i+1)+'>','<d_fill>');
         
     downColumn('<d_fill>','<d_fill>');
     
