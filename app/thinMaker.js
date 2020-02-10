@@ -18,7 +18,7 @@ function makeThin(N, k)
     var l = Math.ceil(Math.log(m)/Math.log(2))+1;
     var s = Math.pow(m,d)-Math.floor((N-3*l-1)/(3*l+2));
     var c = k%3;
-    var r = N+1-(3*l+2)*(Math.pow(m,d)-s+1);
+    var r = (N+1)%(3*l+2);
     
     switch(c)
     {
