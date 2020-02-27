@@ -567,7 +567,7 @@ function demo()
     var query = prompt('Enter a demo ID:\n' + names.join(', ') + ', thin [N] [d]', '');
     if(query == null)
         return;
-    var query = query.toLowerCase().superTrim();
+    var query = superTrim(query.toLowerCase());
     var fileRegExp = new RegExp(names.toLowerCase().join('|')+'|thin\\s\\d*\\s\\d*');
     if(!fileRegExp.test(query))
     {
