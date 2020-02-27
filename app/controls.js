@@ -568,7 +568,7 @@ function demo()
     if(query == null)
         return;
     var query = query.toLowerCase().superTrim();
-    var fileRegExp = new RegExp(names.join('|')+'|thin\\s\\d*\\s\\d*');
+    var fileRegExp = new RegExp(names.toLowerCase().join('|')+'|thin\\s\\d*\\s\\d*');
     if(!fileRegExp.test(query))
     {
         alert('Expected a demo from the list.');
