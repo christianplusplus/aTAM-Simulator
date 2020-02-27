@@ -451,7 +451,7 @@ H,,V,H,,V
 false`;
 var demos = {
     'cube': demo0,
-    'grow2D': demo3,
-    'grow3D': demo1,
+    'grow2d': demo3,
+    'grow3d': demo1,
     'counter': demo2
 };
